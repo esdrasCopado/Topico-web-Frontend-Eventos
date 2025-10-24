@@ -6,7 +6,7 @@ export class SignUpPage {
     constructor(params) {
         this.params = params
         this.navbar = new NavBar({
-            brand: 'Mi App',
+            brand: 'Eventos App',
             currentPath: window.location.pathname,
             links: [
                 { path: '/', text: 'Inicio' },
@@ -16,34 +16,14 @@ export class SignUpPage {
         })
     }
 
-    /**
-     * Actualiza el estado y re-renderiza el componente
-     */
-    setState(newState, shouldRerender = true) {
-        this.state= {
-            ...this.state,
-            ...newState
-        }
-        
-    }
 
-    /**
-     * Autenticación de usuario
-     */
-    async fetchUserAuth() {
-        const { data, error } = await post('/usuarios/login')
-
-        if (error) {
-            console.error('Error en fetchUserAuth:', error)
-            return
-        }
-    }
 
 
     render() {
         return `
-            <div class="page-container">
+        
                 ${this.navbar.render()}
+            <div class="page-container">
                 <div class="auth-card">
                     <h1>Crear Cuenta</h1>
                     <form id="signup-form" class="auth-form">

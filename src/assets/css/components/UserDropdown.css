@@ -1,0 +1,292 @@
+/* ===== USER DROPDOWN MENU (estilo GitHub) ===== */
+
+.navbar-user {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Botón trigger del dropdown */
+.user-menu-trigger {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: #24292f;
+    transition: all 0.2s ease;
+}
+
+.user-menu-trigger:hover {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+.user-menu-trigger:active {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.user-menu-trigger[aria-expanded="true"] {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Avatar del usuario */
+.user-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.user-name-display {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dropdown-arrow {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.user-menu-trigger[aria-expanded="true"] .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+/* Contenedor del dropdown */
+.user-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 280px;
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    z-index: 1000;
+    animation: dropdownFadeIn 0.15s ease-out;
+}
+
+@keyframes dropdownFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.user-dropdown[hidden] {
+    display: none;
+}
+
+/* Header del dropdown */
+.dropdown-header {
+    padding: 16px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.dropdown-user-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.dropdown-user-info strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #24292f;
+    margin-bottom: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dropdown-email {
+    display: block;
+    font-size: 12px;
+    color: #57606a;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.user-badge {
+    padding: 4px 8px;
+    background: #ddf4ff;
+    color: #0969da;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 4px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+
+/* Divider */
+.dropdown-divider {
+    height: 1px;
+    background: rgba(0, 0, 0, 0.08);
+    margin: 8px 0;
+}
+
+/* Menu items */
+.dropdown-menu {
+    padding: 8px;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 8px 12px;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #24292f;
+    text-decoration: none;
+    text-align: left;
+    transition: background 0.15s ease;
+}
+
+.dropdown-item:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.dropdown-item:active {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+.dropdown-item svg {
+    flex-shrink: 0;
+    color: #57606a;
+}
+
+.dropdown-item:hover svg {
+    color: #24292f;
+}
+
+/* Botón de logout (estilo especial) */
+.dropdown-logout {
+    color: #cf222e;
+}
+
+.dropdown-logout:hover {
+    background: rgba(207, 34, 46, 0.08);
+}
+
+.dropdown-logout svg {
+    color: #cf222e;
+}
+
+.dropdown-logout:hover svg {
+    color: #a40e26;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 768px) {
+    .user-dropdown {
+        width: 260px;
+        right: -8px;
+    }
+
+    .user-name-display {
+        display: none;
+    }
+
+    .user-menu-trigger {
+        padding: 6px 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .user-dropdown {
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        border-radius: 12px 12px 0 0;
+        animation: dropdownSlideUp 0.2s ease-out;
+    }
+
+    @keyframes dropdownSlideUp {
+        from {
+            transform: translateY(100%);
+        }
+        to {
+            transform: translateY(0);
+        }
+    }
+}
+
+/* ===== DARK MODE (opcional) ===== */
+
+@media (prefers-color-scheme: dark) {
+    .user-menu-trigger {
+        color: #c9d1d9;
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .user-menu-trigger:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .user-dropdown {
+        background: #161b22;
+        border-color: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .dropdown-user-info strong {
+        color: #c9d1d9;
+    }
+
+    .dropdown-email {
+        color: #8b949e;
+    }
+
+    .dropdown-divider {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .dropdown-item {
+        color: #c9d1d9;
+    }
+
+    .dropdown-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .dropdown-item svg {
+        color: #8b949e;
+    }
+
+    .dropdown-item:hover svg {
+        color: #c9d1d9;
+    }
+}

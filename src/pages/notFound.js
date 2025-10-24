@@ -5,7 +5,7 @@ export class NotFoundPage {
     constructor(params) {
         this.params = params
         this.navbar = new NavBar({
-            brand: 'Mi App',
+            brand: 'Eventos App',
             currentPath: window.location.pathname,
             links: [
                 { path: '/', text: 'Inicio' },

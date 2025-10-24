@@ -96,6 +96,16 @@ class Router {
 
         this.currentRoute = route
 
+        // ===== VERIFICACIÓN DE GUARDS =====
+        // Ejecutar guard antes de renderizar (si existe)
+        if (route.guard && typeof route.guard === 'function') {
+            const canAccess = route.guard()
+            if (!canAccess) {
+                console.warn(`⚠️ Acceso denegado a la ruta: ${pathname}`)
+                return // El guard se encarga de redirigir
+            }
+        }
+
         // Obtener el contenedor de la app
         const app = document.getElementById('app')
 

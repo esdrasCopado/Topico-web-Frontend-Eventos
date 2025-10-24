@@ -6,22 +6,18 @@ export class HomePage {
     constructor(params) {
         this.params = params
         this.navbar = new NavBar({
-            brand: 'Mi App',
-            currentPath: window.location.pathname,
-            links: [
-                { path: '/', text: 'Inicio' },
-                { path: '/login', text: 'Iniciar Sesión' },
-                { path: '/signup', text: 'Registrarse' }
-            ]
+            brand: 'Eventos App',
+            currentPath: window.location.pathname
         })
         this.eventsList = new EventsList()
     }
 
     render() {
         return `
-            <div class="page-container">
+        
                 ${this.navbar.render()}
 
+            <div class="page-container">
                 <div class="hero">
                     <h1>Bienvenido a tu Aplicación Web</h1>
                     <p>Sistema de rutas tipo React con Vanilla JavaScript y Vite</p>
