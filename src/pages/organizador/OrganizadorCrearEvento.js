@@ -1,12 +1,14 @@
 import { NavBar } from '../../components/NavBar.js'
 import { getUserInfo } from '../../services/auth.js'
-import { post } from '../../utils/api.js'
+import { postFormData } from '../../utils/api.js'
+import { ImageDrop } from '../../components/ImageDrop.js'
 
 export class OrganizadorCrearEventoPage {
     constructor(params) {
         this.params = params
         this.navbar = new NavBar()
         this.user = getUserInfo()
+        this.imageDrop = null // Instancia del ImageDrop
 
         this.state = {
             submitting: false,
@@ -82,6 +84,16 @@ export class OrganizadorCrearEventoPage {
                     </div>
                 </div>
 
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="event-image">
+                            Imagen del Evento
+                        </label>
+                        <div id="event-image-container"></div>
+                        <small class="form-hint">Sube una imagen atractiva para tu evento (opcional, máx. 5MB)</small>
+                    </div>
+                </div>
+
                 <div id="form-message" class="form-message"></div>
 
                 <div class="form-actions">
@@ -143,7 +155,33 @@ export class OrganizadorCrearEventoPage {
 
     afterRender() {
         this.navbar.afterRender()
+        this.setupImageDrop()
         this.setupFormHandlers()
+    }
+
+    setupImageDrop() {
+        // Crear instancia del ImageDrop
+        this.imageDrop = new ImageDrop({
+            maxSize: 5, // 5MB máximo
+            acceptedFormats: ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'],
+            placeholder: 'Arrastra la imagen del evento aquí o haz clic para seleccionar',
+            onFileSelect: (file) => {
+                if (file) {
+                    console.log('✅ Imagen seleccionada:', file.name, `(${(file.size / 1024 / 1024).toFixed(2)} MB)`)
+                } else {
+                    console.log('🗑️ Imagen eliminada')
+                }
+            },
+            onError: (error) => {
+                this.showMessage(error.message, 'error')
+            }
+        })
+
+        // Renderizar el ImageDrop en el contenedor
+        const container = document.getElementById('event-image-container')
+        if (container) {
+            container.appendChild(this.imageDrop.render())
+        }
     }
 
     setupFormHandlers() {
@@ -202,23 +240,45 @@ export class OrganizadorCrearEventoPage {
             return
         }
 
-        // Preparar datos para enviar al backend
-        const eventData = {
-            nombre: nombre.trim(),
-            descripcion: descripcion.trim(),
-            fecha: fechaISO,
-            ubicacion: ubicacion.trim(),
-            organizadorId: this.user.organizadorId
+        // Crear FormData para enviar con imagen
+        const submitFormData = new FormData()
+        submitFormData.append('nombre', nombre.trim())
+        submitFormData.append('descripcion', descripcion.trim())
+        submitFormData.append('fecha', fechaISO)
+        submitFormData.append('ubicacion', ubicacion.trim())
+
+        // Convertir organizadorId a número explícitamente
+        const organizadorIdNumero = parseInt(this.user.organizadorId, 10)
+        submitFormData.append('organizadorId', organizadorIdNumero)
+
+        // Agregar imagen si existe
+        const imageFile = this.imageDrop?.getFile()
+        if (imageFile) {
+            submitFormData.append('imagen', imageFile)
+            console.log('📷 Imagen incluida:', imageFile.name)
+        } else {
+            console.log('📷 Sin imagen')
         }
 
-        console.log('📝 Enviando evento:', eventData)
-        console.log('👤 OrganizadorId:', this.user.organizadorId)
+        console.log('📝 Enviando evento...')
+        console.log('👤 OrganizadorId (original):', this.user.organizadorId, typeof this.user.organizadorId)
+        console.log('👤 OrganizadorId (convertido):', organizadorIdNumero, typeof organizadorIdNumero)
+
+        // Debug: mostrar todos los campos del FormData
+        console.log('📦 FormData completo:')
+        for (let [key, value] of submitFormData.entries()) {
+            if (value instanceof File) {
+                console.log(`  ${key}: [File] ${value.name}`)
+            } else {
+                console.log(`  ${key}: ${value} (${typeof value})`)
+            }
+        }
 
         // Actualizar estado a submitting
         this.updateState({ submitting: true, error: null })
 
-        // Enviar al backend
-        const { data, error } = await post('/eventos', eventData)
+        // Enviar al backend usando postFormData
+        const { data, error } = await postFormData('/eventos', submitFormData)
 
         if (error) {
             console.error('❌ Error al crear evento:', error)
@@ -233,8 +293,9 @@ export class OrganizadorCrearEventoPage {
         this.updateState({ submitting: false, success: true })
         this.showMessage('¡Evento creado exitosamente!', 'success')
 
-        // Limpiar formulario
+        // Limpiar formulario e imagen
         form.reset()
+        this.imageDrop?.reset()
 
         // Redirigir después de 2 segundos
         setTimeout(() => {

@@ -5,6 +5,7 @@ import axios from 'axios'
 import { getAuthToken, logout } from '../services/auth.js'
 
 const API_BASE_URL = 'http://localhost:3000/api'
+const IMAGE_BASE_URL = 'http://localhost:3000'
 
 // ===== INTERCEPTOR DE PETICIONES =====
 // Agregar token automáticamente a todas las peticiones
@@ -88,6 +89,44 @@ export async function post(endpoint, body) {
         }
     }
 }
+
+/**
+ * POST con FormData (para subir archivos)
+ * @param {string} endpoint - Ruta del endpoint (ej: '/eventos')
+ * @param {FormData} formData - FormData con archivos
+ * @returns {Promise<{data: any, error: string|null}>}
+ */
+export async function postFormData(endpoint, formData) {
+    try {
+        console.log('📤 Enviando FormData POST a:', `${API_BASE_URL}${endpoint}`)
+
+        const response = await axios.post(`${API_BASE_URL}${endpoint}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+
+        console.log('✅ Respuesta exitosa:', response.data)
+        return { data: response.data, error: null }
+    } catch (error) {
+        console.error('❌ Error en la petición POST FormData:', error)
+        console.error('📍 URL:', `${API_BASE_URL}${endpoint}`)
+
+        // Extraer mensaje de error del backend
+        const errorMessage = error.response?.data?.message
+            || error.response?.data?.error
+            || error.message
+
+        console.error('💬 Mensaje de error:', errorMessage)
+        console.error('🔢 Status code:', error.response?.status)
+
+        return {
+            data: null,
+            error: errorMessage,
+            status: error.response?.status
+        }
+    }
+}
 export async function put(endpoint, body) {
     try {
         const response = await axios.put(`${API_BASE_URL}${endpoint}`, body)
@@ -109,3 +148,5 @@ export async function del(endpoint) {
         return { data: null, error: error.message }
     }
 }
+
+export const getApiBaseUrl = () => IMAGE_BASE_URL

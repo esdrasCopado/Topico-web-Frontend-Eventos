@@ -230,7 +230,6 @@ export class EventDetailPage {
     }
 
     async loadEvent() {
-        console.log('📥 Cargando evento ID:', this.eventId)
 
         // 1. Cargar datos del evento
         const { data, error } = await get(`/eventos/${this.eventId}`)
@@ -241,7 +240,6 @@ export class EventDetailPage {
             return
         }
 
-        console.log('✅ Evento cargado:', data)
 
         // El backend puede devolver { success, data: { evento } } o directamente el evento
         const evento = data.evento || data
@@ -250,12 +248,9 @@ export class EventDetailPage {
         const { data: boletosData } = await get(`/boletos/evento/${this.eventId}/disponibles`)
         const boletosDisponibles = boletosData?.boletos || boletosData || []
 
-        console.log('🎫 Boletos disponibles:', boletosDisponibles.length)
-        console.log('🎫 Datos completos de boletos:', boletosDisponibles)
 
         // 3. Cargar estadísticas de boletos (opcional)
         const { data: statsData } = await get(`/boletos/evento/${this.eventId}/estadisticas`)
-        console.log('📊 Estadísticas de boletos:', statsData)
 
         this.updateState({
             event: evento,
@@ -285,7 +280,6 @@ export class EventDetailPage {
         purchaseBtn.disabled = true
         purchaseBtn.textContent = 'Procesando...'
 
-        console.log('🎫 Comprando boleto para evento:', this.eventId)
 
         const user = getUserInfo()
 
@@ -329,7 +323,6 @@ export class EventDetailPage {
             return
         }
 
-        console.log('✅ Orden creada exitosamente:', data)
 
         const orden = data.orden || data
 
@@ -362,7 +355,6 @@ export class EventDetailPage {
                 return
             }
 
-            console.log('✅ Pago procesado exitosamente:', pagoData)
         }
 
         messageContainer.innerHTML = `

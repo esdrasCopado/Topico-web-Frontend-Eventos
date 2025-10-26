@@ -1,5 +1,5 @@
 import { Link } from '../router.js'
-
+import { getApiBaseUrl } from '../utils/api.js'
 export class EventCard {
     constructor(props = {}) {
         this.id = props.id
@@ -8,9 +8,11 @@ export class EventCard {
         this.descripcion = props.descripcion || props.description
         this.ubicacion = props.ubicacion || props.location
         this.fecha = props.fecha || props.date
-        this.organizadorId = props.organizador_id
+        this.organizadorId = props.organizador_id || props.organizadorId
         this.precio = props.precio || props.price || 0
         this.cupoDisponible = props.cupo_disponible || props.availableSeats || 0
+        // Mapear imagenUrl (del backend) o imagen o image
+        this.imagenUrl = props.imagenUrl || props.imagen || props.image || ''
     }
 
     render() {
@@ -24,8 +26,19 @@ export class EventCard {
             })
             : 'Fecha por confirmar'
 
+        // Construir URL de la imagen
+        const imageUrl = this.imagenUrl
+            ? `${getApiBaseUrl()}${this.imagenUrl}`
+            : null
+
         return `
             <a href="/evento/${this.id}" data-link class="event-card">
+                ${imageUrl ? `
+                    <div class="event-image-container">
+                        <img src="${imageUrl}" alt="${this.nombre}" class="event-image" onerror="this.parentElement.style.display='none'" />
+                    </div>
+                ` : ''}
+
                 ${this.nombre ? `<h3 class="event-name">${this.nombre}</h3>` : ''}
                 ${this.descripcion ? `<p class="event-description">${this.descripcion}</p>` : ''}
 

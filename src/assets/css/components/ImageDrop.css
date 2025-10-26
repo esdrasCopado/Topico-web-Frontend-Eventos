@@ -1,0 +1,201 @@
+/* ========================================
+   IMAGE DROP COMPONENT - Drag & Drop de Imágenes
+======================================== */
+
+.image-drop-wrapper {
+    width: 100%;
+    margin-bottom: var(--spacing-md);
+}
+
+/* Zona de drop */
+.image-drop-zone {
+    position: relative;
+    width: 100%;
+    min-height: 280px;
+    border: 2px dashed var(--border-color);
+    border-radius: var(--border-radius-lg);
+    background: var(--bg-secondary);
+    transition: var(--transition-slow);
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.image-drop-zone:hover {
+    border-color: var(--info-color);
+    background: rgba(9, 105, 218, 0.02);
+}
+
+.image-drop-zone.drag-over {
+    border-color: var(--info-color);
+    background: rgba(9, 105, 218, 0.05);
+    border-style: solid;
+    transform: scale(1.02);
+}
+
+/* Contenido del dropzone */
+.drop-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xl);
+    min-height: 280px;
+    text-align: center;
+}
+
+/* Icono de imagen */
+.drop-icon {
+    color: var(--gray);
+    margin-bottom: var(--spacing-md);
+    transition: var(--transition);
+}
+
+.image-drop-zone:hover .drop-icon {
+    color: var(--info-color);
+    transform: scale(1.1);
+}
+
+.image-drop-zone.drag-over .drop-icon {
+    color: var(--info-color);
+    animation: bounce 0.5s ease;
+}
+
+/* Textos */
+.drop-text {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--dark-medium);
+    margin-bottom: var(--spacing-xs);
+}
+
+.drop-hint {
+    font-size: var(--font-size-sm);
+    color: var(--gray-medium);
+    margin-bottom: var(--spacing-md);
+}
+
+/* Botón de seleccionar */
+.btn-select-file {
+    margin-top: var(--spacing-sm);
+}
+
+/* Vista previa de imagen */
+.image-preview {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.preview-image {
+    max-width: 100%;
+    max-height: 400px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: var(--border-radius);
+    transition: var(--transition-slow);
+}
+
+/* Overlay con botones */
+.preview-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.image-preview:hover .preview-overlay {
+    opacity: 1;
+}
+
+.image-preview:hover .preview-image {
+    transform: scale(1.05);
+}
+
+/* Botones del overlay */
+.btn-change-image,
+.btn-remove-image {
+    min-width: 160px;
+    z-index: 10;
+}
+
+/* Animaciones */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.image-preview {
+    animation: fadeIn 0.3s ease;
+}
+
+/* Estados de error */
+.image-drop-zone.error {
+    border-color: var(--danger-color);
+    background: rgba(239, 68, 68, 0.05);
+}
+
+.image-drop-zone.error .drop-icon {
+    color: var(--danger-color);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .image-drop-zone {
+        min-height: 220px;
+    }
+
+    .drop-content {
+        padding: var(--spacing-lg);
+        min-height: 220px;
+    }
+
+    .drop-icon {
+        width: 48px;
+        height: 48px;
+    }
+
+    .drop-text {
+        font-size: var(--font-size-sm);
+    }
+
+    .drop-hint {
+        font-size: var(--font-size-xs);
+    }
+
+    .btn-change-image,
+    .btn-remove-image {
+        min-width: 120px;
+        font-size: var(--font-size-sm);
+        padding: var(--spacing-xs) var(--spacing-sm);
+    }
+}
