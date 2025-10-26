@@ -43,7 +43,8 @@ export class NavBar {
                     links.push(
                         { path: '/organizador', text: 'Mis Eventos' },
                         { path: '/organizador/crear-evento', text: 'Crear Evento' },
-                        { path: '/organizador/estadisticas', text: 'Estadísticas' }
+                        { path: '/organizador/estadisticas', text: 'Estadísticas' },
+                        { path: '/organizador/crear-boletos', text: 'Crear Boletos' }
                     )
                     break
 

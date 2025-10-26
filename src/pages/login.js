@@ -69,19 +69,16 @@ export class LoginPage {
         // Guardar accessToken
         if (tokens.accessToken && typeof tokens.accessToken === 'string') {
             localStorage.setItem('authToken', tokens.accessToken)
-            console.log('💾 Access Token guardado en localStorage')
         }
 
         // Guardar refresh token si existe
         if (tokens.refreshToken) {
             localStorage.setItem('refreshToken', tokens.refreshToken)
-            console.log('💾 Refresh Token guardado en localStorage')
         }
 
         // Guardar información del usuario si existe
         if (user && Object.keys(user).length > 0) {
             localStorage.setItem('user', JSON.stringify(user))
-            console.log('💾 Información del usuario guardada:', user)
         }
 
         // Opcional: guardar timestamp de login

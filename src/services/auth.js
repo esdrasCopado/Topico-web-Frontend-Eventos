@@ -174,6 +174,10 @@ export function getUserInfo() {
         apellidos: user.apellidos,
         email: user.email,
         rol: user.rol,
+        organizadorId: user.organizadorId,
+        artistaId: user.artistaId,
+        telefono: user.telefono,
+        fechaRegistro: user.fechaRegistro,
         nombreCompleto: `${user.nombre} ${user.apellidos}`,
         iniciales: `${user.nombre?.[0] || ''}${user.apellidos?.[0] || ''}`.toUpperCase()
     }

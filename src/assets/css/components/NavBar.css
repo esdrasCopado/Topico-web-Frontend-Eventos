@@ -75,12 +75,10 @@
 /* Responsive - Móvil */
 @media (max-width: 768px) {
     .navbar {
-        flex-direction: column;
-        gap: 1rem;
+        flex-direction: row;
     }
     
     .navbar-links {
-        flex-direction: column;
-        width: 100%;
+        display: none;
     }
 }

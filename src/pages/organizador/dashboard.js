@@ -1,11 +1,13 @@
 import { NavBar } from '../../components/NavBar.js'
 import { getUserInfo } from '../../services/auth.js'
+import { getEventsOrganizador } from '../../components/getEventsOrganizador.js'
 
 export class OrganizadorDashboardPage {
     constructor(params) {
         this.params = params
         this.navbar = new NavBar()
         this.user = getUserInfo()
+        this.eventsSelector = new getEventsOrganizador()
     }
 
     render() {
@@ -55,20 +57,9 @@ export class OrganizadorDashboardPage {
                         </div>
                     </div>
 
-                    <div class="recent-events">
-                        <h2>Eventos Recientes</h2>
-                        <div class="event-list">
-                            <div class="event-item">
-                                <h3>Concierto de Rock 2025</h3>
-                                <p>Próximo: 15 de Noviembre</p>
-                                <span class="status-badge active">Activo</span>
-                            </div>
-                            <div class="event-item">
-                                <h3>Festival de Jazz</h3>
-                                <p>Próximo: 22 de Noviembre</p>
-                                <span class="status-badge active">Activo</span>
-                            </div>
-                        </div>
+                    <div class="my-events-section">
+                        <h2>Mis Eventos</h2>
+                        ${this.eventsSelector.render()}
                     </div>
                 </div>
             </div>
@@ -77,6 +68,7 @@ export class OrganizadorDashboardPage {
 
     afterRender() {
         this.navbar.afterRender()
+        this.eventsSelector.afterRender()
         console.log('✅ Panel de Organizador cargado')
     }
 }

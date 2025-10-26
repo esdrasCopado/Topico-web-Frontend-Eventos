@@ -4,6 +4,7 @@ import './assets/css/components.css'
 import './assets/css/components/NavBar.css'
 import './assets/css/components/UserDropdown.css'
 import './assets/css/pages/dashboard.css'
+import './assets/css/pages/eventDetail.css'
 
 // Importar Router
 import Router from './router.js'
@@ -18,10 +19,13 @@ import { SignUpPage } from './pages/signUp.js'
 import { ComponentsDemoPage } from './pages/components-demo.js'
 import { NotFoundPage } from './pages/notFound.js'
 import { UnauthorizedPage } from './pages/unauthorized.js'
+import { EventDetailPage } from './pages/eventDetail.js'
 
 // Importar páginas protegidas por rol
 import { AdminDashboardPage } from './pages/admin/dashboard.js'
 import { OrganizadorDashboardPage } from './pages/organizador/dashboard.js'
+import { OrganizadorCrearEventoPage } from './pages/organizador/OrganizadorCrearEvento.js'
+import { createTickets } from './pages/organizador/createTickets.js'
 import { UserDashboardPage } from './pages/user/dashboard.js'
 
 // Definir rutas (como en React Router)
@@ -44,6 +48,10 @@ const routes = [
     {
         path: '/components',
         component: ComponentsDemoPage
+    },
+    {
+        path: '/evento/:id',
+        component: EventDetailPage
     },
 
     // ===== RUTAS PROTEGIDAS - ADMIN =====
@@ -76,12 +84,17 @@ const routes = [
     },
     {
         path: '/organizador/crear-evento',
-        component: OrganizadorDashboardPage,
+        component: OrganizadorCrearEventoPage,
         guard: () => authGuard({ allowedRoles: [ROLES.ORGANIZADOR, ROLES.ADMIN] })
     },
     {
         path: '/organizador/estadisticas',
         component: OrganizadorDashboardPage,
+        guard: () => authGuard({ allowedRoles: [ROLES.ORGANIZADOR, ROLES.ADMIN] })
+    },
+    {
+        path: '/organizador/crear-boletos/:eventId',
+        component: createTickets,
         guard: () => authGuard({ allowedRoles: [ROLES.ORGANIZADOR, ROLES.ADMIN] })
     },
 
