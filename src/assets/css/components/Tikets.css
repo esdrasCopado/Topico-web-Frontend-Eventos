@@ -1,0 +1,340 @@
+/* ========================================
+   6. TICKETS
+======================================== */
+
+.tickets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.ticket-card {
+    background: var(--white);
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: var(--border-radius-lg);
+    padding: 20px;
+    cursor: pointer;
+    transition: var(--transition-slow);
+    position: relative;
+    overflow: hidden;
+}
+
+.ticket-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--info-color), #1f6feb);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.ticket-card:hover {
+    border-color: var(--info-color);
+    box-shadow: 0 8px 16px rgba(9, 105, 218, 0.15);
+    transform: translateY(-2px);
+}
+
+.ticket-card:hover::before {
+    transform: scaleX(1);
+}
+
+/* Indicador de "click para seleccionar" solo para tarjetas inactivas */
+.ticket-card:not(.active):not(.selected)::after {
+    content: 'Click para seleccionar';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 11px;
+    color: var(--info-color);
+    background: rgba(9, 105, 218, 0.1);
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.ticket-card:not(.active):not(.selected):hover::after {
+    opacity: 1;
+}
+
+.ticket-card.active {
+    border-color: var(--info-color);
+    background: linear-gradient(135deg, rgba(9, 105, 218, 0.03), rgba(31, 111, 235, 0.01));
+    box-shadow: 0 4px 12px rgba(9, 105, 218, 0.15);
+}
+
+.ticket-card.active::before {
+    transform: scaleX(1);
+}
+
+.ticket-card.selected {
+    border-color: var(--info-color);
+    background: linear-gradient(135deg, rgba(9, 105, 218, 0.05), rgba(31, 111, 235, 0.02));
+    box-shadow: 0 4px 12px rgba(9, 105, 218, 0.2);
+}
+
+.ticket-card.selected::before {
+    transform: scaleX(1);
+}
+
+.ticket-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.ticket-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(9, 105, 218, 0.1);
+    border-radius: var(--border-radius);
+    color: var(--info-color);
+    transition: var(--transition-slow);
+}
+
+.ticket-card:hover .ticket-icon,
+.ticket-card.selected .ticket-icon {
+    background: var(--info-color);
+    color: var(--white);
+    transform: scale(1.1);
+}
+
+.ticket-name {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semibold);
+    color: var(--dark-medium);
+    margin: 0;
+}
+
+.ticket-description {
+    font-size: var(--font-size-sm);
+    color: var(--gray-medium);
+    line-height: var(--line-height-relaxed);
+}
+
+.ticket-form {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    display: none;
+}
+
+.ticket-card.selected .ticket-form {
+    display: block;
+    animation: slideDown 0.3s ease;
+}
+
+.ticket-summary {
+    background: rgba(9, 105, 218, 0.05);
+    padding: 12px;
+    border-radius: var(--border-radius-sm);
+    margin-top: 10px;
+    font-size: var(--font-size-xs);
+    color: var(--gray-medium);
+}
+
+.ticket-summary strong {
+    color: var(--info-color);
+    font-weight: var(--font-weight-bold);
+}
+
+/* Ticket List Items */
+.tickets-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ticket-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius);
+}
+
+.ticket-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ticket-item-type {
+    font-weight: var(--font-weight-semibold);
+    color: var(--dark-medium);
+}
+
+.ticket-item-details {
+    font-size: var(--font-size-xs);
+    color: var(--gray-medium);
+}
+
+.ticket-item-remove {
+    background: #d1242f;
+    color: var(--white);
+    border: none;
+    padding: 6px 12px;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    transition: var(--transition);
+}
+
+.ticket-item-remove:hover {
+    background: #a40e26;
+    transform: scale(1.05);
+}
+
+.no-tickets-message {
+    text-align: center;
+    padding: 20px;
+    color: var(--gray-medium);
+    font-style: italic;
+}
+
+/* ========================================
+   TICKET LIST WITH QUANTITY CONTROLS
+======================================== */
+
+.ticket-header-info {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ticket-main{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+
+
+.ticket-availability {
+    font-size: var(--font-size-xs);
+    color: var(--gray-medium);
+}
+
+.ticket-availability.low-stock {
+    color: #d1242f;
+    font-weight: var(--font-weight-semibold);
+}
+
+/* Controles de cantidad en la lista */
+.ticket-quantity-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: slideInFromRight 0.3s ease;
+}
+
+/* Animación de aparición */
+@keyframes slideInFromRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.quantity-btn-list {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--white);
+    border: 2px solid var(--gray-light);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--info-color);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.quantity-btn-list:hover:not(:disabled) {
+    background: var(--info-color);
+    color: var(--white);
+    border-color: var(--info-color);
+    transform: scale(1.1);
+}
+
+.quantity-btn-list:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.quantity-input-list {
+    width: 48px;
+    text-align: center;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semibold);
+    color: var(--dark-medium);
+    background: var(--bg-secondary);
+    border: 2px solid var(--gray-light);
+    border-radius: var(--border-radius-sm);
+    padding: 4px;
+    cursor: default;
+}
+
+.quantity-input-list:focus {
+    outline: none;
+    border-color: var(--info-color);
+}
+
+/* Animación cuando hay cantidad seleccionada */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.ticket-card.selected .quantity-input-list {
+    background: rgba(9, 105, 218, 0.1);
+    border-color: var(--info-color);
+    animation: pulse 0.3s ease;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .ticket-header-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .ticket-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .ticket-quantity-control {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}

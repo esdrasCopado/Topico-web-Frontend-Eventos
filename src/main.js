@@ -7,6 +7,7 @@ import './assets/css/components/ImageDrop.css'
 import './assets/css/pages/home.css'
 import './assets/css/pages/dashboard.css'
 import './assets/css/pages/eventDetail.css'
+// Nota: Tikets.css se carga solo en createTickets.js
 
 // Importar Router
 import Router from './router.js'
@@ -18,10 +19,10 @@ import { authGuard, guestGuard, ROLES } from './services/auth.js'
 import { HomePage } from './pages/home.js'
 import { LoginPage } from './pages/login.js'
 import { SignUpPage } from './pages/signUp.js'
-import { ComponentsDemoPage } from './pages/components-demo.js'
 import { NotFoundPage } from './pages/notFound.js'
 import { UnauthorizedPage } from './pages/unauthorized.js'
 import { EventDetailPage } from './pages/eventDetail.js'
+import { CartPurchasePage } from './pages/cartPurchase.js'
 
 // Importar páginas protegidas por rol
 import { AdminDashboardPage } from './pages/admin/dashboard.js'
@@ -48,12 +49,13 @@ const routes = [
         guard: () => guestGuard() // Solo accesible si NO está autenticado
     },
     {
-        path: '/components',
-        component: ComponentsDemoPage
-    },
-    {
         path: '/evento/:id',
         component: EventDetailPage
+    },
+    {
+        path: '/carrito',
+        component: CartPurchasePage,
+        guard: () => authGuard({ allowedRoles: [ROLES.USER, ROLES.ORGANIZADOR, ROLES.ADMIN] })
     },
 
     // ===== RUTAS PROTEGIDAS - ADMIN =====

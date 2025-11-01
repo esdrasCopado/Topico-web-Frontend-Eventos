@@ -1,3 +1,4 @@
+import '../../assets/css/components/Tikets.css'
 import { NavBar } from "../../components/NavBar"
 import { get, post } from "../../utils/api.js"
 import { Icons } from "../../utils/icons"
@@ -31,9 +32,9 @@ export class createTickets {
             this.eventData = data
             this.eventName = this.eventData?.nombre || 'Evento sin nombre'
 
-            console.log('✅ Evento cargado:', this.eventName)
+
         } catch (error) {
-            console.error('❌ Error al obtener evento:', error)
+            console.error(' Error al obtener evento:', error)
             this.eventName = 'Error al cargar evento'
         }
     }   
@@ -282,7 +283,7 @@ export class createTickets {
                 }))
             }
 
-            console.log('📤 Enviando payload con todas las configuraciones:', JSON.stringify(payload, null, 2))
+          
 
             // Enviar UNA SOLA petición con todas las configuraciones
             const { data, error } = await post('/boletos/lote', payload)
@@ -291,7 +292,7 @@ export class createTickets {
                 throw new Error(error)
             }
 
-            console.log('✅ Respuesta del servidor:', data)
+
 
             // Contar el total de boletos creados
             const totalBoletos = this.selectedTickets.reduce((sum, ticket) => {

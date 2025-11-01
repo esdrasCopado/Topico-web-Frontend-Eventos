@@ -1,3 +1,4 @@
+import '../assets/css/components/MainCards.css'
 import { Link } from '../router.js'
 import { NavBar } from '../components/NavBar.js'
 import { EventsList } from '../components/EventsList.js'

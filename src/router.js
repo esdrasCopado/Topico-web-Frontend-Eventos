@@ -101,7 +101,7 @@ class Router {
         if (route.guard && typeof route.guard === 'function') {
             const canAccess = route.guard()
             if (!canAccess) {
-                console.warn(`⚠️ Acceso denegado a la ruta: ${pathname}`)
+                console.warn(`Acceso denegado a la ruta: ${pathname}`)
                 return // El guard se encarga de redirigir
             }
         }

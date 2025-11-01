@@ -1,5 +1,7 @@
+import '../assets/css/components/Tikets.css'
 import { NavBar } from '../components/NavBar.js'
 import { ListAvailableTickets } from '../components/ListAvailableTickets.js'
+import { TicketSelector } from '../components/TicketSelector.js'
 import { Link } from '../router.js'
 import { get, post } from '../utils/api.js'
 import { isAuthenticated, getUserInfo } from '../services/auth.js'
@@ -9,6 +11,8 @@ export class EventDetailPage {
         this.params = params
         this.eventId = params.id // ID del evento desde la URL
         this.navbar = new NavBar()
+        this.ticketSelector = null // Instancia del TicketSelector
+        this.ticketsList = null // Instancia de ListAvailableTickets
 
         this.state = {
             event: null,
@@ -16,7 +20,8 @@ export class EventDetailPage {
             estadisticasBoletos: {},
             loading: true,
             error: null,
-            purchasing: false
+            purchasing: false,
+            selectedTickets: [] // Tickets seleccionados desde la lista
         }
     }
 
@@ -121,48 +126,19 @@ export class EventDetailPage {
                         </div>
                     </div>
 
-                    <!-- Sidebar de compra -->
+                    <!-- Sidebar de compra - Resumen de selección -->
                     <div class="event-purchase-card">
-                        <div class="price-section">
-                            ${event.precio > 0 ? `
-                                <div class="price">
-                                    <span class="price-label">Precio</span>
-                                    <span class="price-amount">$${event.precio.toLocaleString('es-MX')}</span>
-                                </div>
-                            ` : `
-                                <div class="price-free">
-                                    <span class="price-amount">Gratis</span>
-                                </div>
-                            `}
-
-                            <div class="availability">
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                                    <path d="M1.75 1A1.75 1.75 0 000 2.75v10.5C0 14.216.784 15 1.75 15h12.5A1.75 1.75 0 0016 13.25V2.75A1.75 1.75 0 0014.25 1H1.75zM1.5 2.75a.25.25 0 01.25-.25h12.5a.25.25 0 01.25.25v10.5a.25.25 0 01-.25.25H1.75a.25.25 0 01-.25-.25V2.75z"/>
-                                </svg>
-                                <span class="${this.state.boletosDisponibles?.length < 10 ? 'low-availability' : ''}">
-                                    ${this.state.boletosDisponibles?.length || 0} boletos disponibles
-                                </span>
-                            </div>
-                           <!-- se activara cuando se haya seleccionado un boleto 
-                            <div class="ticket-number">
-                                <a class="btn btn-secondary btn-small">-</a>
-                                <span>1</span>
-                                <a class="btn btn-secondary btn-small">+</a>
-                            </div>
-                            -->
-                        </div>
                         ${isAuth ? `
-                            <button id="purchase-btn" class="btn btn-primary btn-large" ${!this.state.boletosDisponibles || this.state.boletosDisponibles.length === 0 ? 'disabled' : ''}>
-                                ${!this.state.boletosDisponibles || this.state.boletosDisponibles.length === 0 ? 'Agotado' : 'Comprar Boleto'}
-                            </button>
+                            <div id="purchase-summary-container">
+                                ${this.renderPurchaseSummary()}
+                            </div>
+                            <div id="purchase-message"></div>
                         ` : `
                             <div class="auth-required">
                                 <p>Debes iniciar sesión para comprar boletos</p>
                                 ${Link('/login', 'Iniciar Sesión', 'btn btn-primary btn-large')}
                             </div>
                         `}
-
-                        <div id="purchase-message"></div>
                     </div>
                 </div>
 
@@ -223,9 +199,15 @@ export class EventDetailPage {
         // Cargar datos del evento
         await this.loadEvent()
 
-        // Setup del botón de compra
+        // Inicializar los componentes si el usuario está autenticado
         if (isAuthenticated()) {
-            this.setupPurchaseButton()
+            // Inicializar la lista de tickets
+            if (this.ticketsList) {
+                this.ticketsList.afterRender()
+            }
+
+            // Configurar el botón de compra
+            this.setupPurchaseButtonFromSummary()
         }
     }
 
@@ -377,18 +359,218 @@ export class EventDetailPage {
 
     renderTicketsList() {
         // Crear una instancia del componente pasando todos los boletos y el ID del evento
-        const ticketsList = new ListAvailableTickets({
+        this.ticketsList = new ListAvailableTickets({
             eventoId: this.eventId,
-            boletos: this.state.boletosDisponibles
+            boletos: this.state.boletosDisponibles,
+            onTicketSelect: (selectionData) => this.handleTicketSelection(selectionData)
         })
 
-        return ticketsList.render()
+        return this.ticketsList.render()
+    }
+
+    /**
+     * Maneja la selección de tickets desde ListAvailableTickets
+     */
+    handleTicketSelection(selectionData) {
+        console.log('🎫 Ticket seleccionado:', selectionData)
+
+        // Actualizar el estado con las selecciones actuales
+        const allSelections = this.ticketsList.getSelectedTickets()
+        this.updateState({ selectedTickets: allSelections })
+    }
+
+    /**
+     * Renderiza el resumen de compra en el sidebar
+     */
+    renderPurchaseSummary() {
+        const selectedTickets = this.state.selectedTickets || []
+
+        if (selectedTickets.length === 0) {
+            return `
+                <div class="purchase-summary-empty">
+                    <span class="summary-icon">🎟️</span>
+                    <h4>Selecciona tus boletos</h4>
+                    <p>Elige los tipos y cantidades de boletos que deseas comprar en la lista de abajo</p>
+                </div>
+            `
+        }
+
+        // Calcular totales
+        const totalQuantity = selectedTickets.reduce((sum, ticket) => sum + ticket.cantidad, 0)
+        const totalAmount = selectedTickets.reduce((sum, ticket) => sum + (ticket.precio * ticket.cantidad), 0)
+
+        return `
+            <div class="purchase-summary-content">
+                <h4>Resumen de Compra</h4>
+
+                <div class="summary-items">
+                    ${selectedTickets.map(ticket => `
+                        <div class="summary-item">
+                            <div class="summary-item-info">
+                                <span class="summary-item-type">${ticket.tipo}</span>
+                                <span class="summary-item-qty">× ${ticket.cantidad}</span>
+                            </div>
+                            <span class="summary-item-price">$${(ticket.precio * ticket.cantidad).toLocaleString('es-MX')}</span>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="summary-totals">
+                    <div class="summary-total-row">
+                        <span>Subtotal (${totalQuantity} boleto${totalQuantity > 1 ? 's' : ''}):</span>
+                        <span class="summary-total-amount">$${totalAmount.toLocaleString('es-MX')}</span>
+                    </div>
+                    <div class="summary-total-row total">
+                        <span>Total:</span>
+                        <span class="summary-total-amount-final">$${totalAmount.toLocaleString('es-MX')}</span>
+                    </div>
+                </div>
+
+                <button id="confirm-purchase-btn" class="btn btn-primary btn-large">
+                    Confirmar Compra
+                </button>
+            </div>
+        `
+    }
+
+    renderTicketSelector() {
+        // Si no hay boletos, mostrar mensaje
+        if (!this.state.boletosDisponibles || this.state.boletosDisponibles.length === 0) {
+            return `
+                <div class="no-tickets-available">
+                    <span class="no-tickets-icon">🎫</span>
+                    <p>No hay boletos disponibles para este evento</p>
+                </div>
+            `
+        }
+
+        // Crear instancia del TicketSelector con callback de compra
+        this.ticketSelector = new TicketSelector({
+            eventId: this.eventId,
+            boletosDisponibles: this.state.boletosDisponibles,
+            onPurchase: (purchaseData) => this.handleTicketPurchase(purchaseData)
+        })
+
+        return this.ticketSelector.render()
+    }
+
+    /**
+     * Configura el botón de compra del resumen
+     */
+    setupPurchaseButtonFromSummary() {
+        const purchaseBtn = document.getElementById('confirm-purchase-btn')
+        if (!purchaseBtn) return
+
+        purchaseBtn.addEventListener('click', async () => {
+            await this.handlePurchaseFromSummary()
+        })
+    }
+
+    /**
+     * Maneja la compra desde el resumen (múltiples tipos de boletos)
+     */
+    async handlePurchaseFromSummary() {
+        const selectedTickets = this.state.selectedTickets || []
+
+        if (selectedTickets.length === 0) {
+            alert('Por favor, selecciona al menos un boleto')
+            return
+        }
+
+        const messageContainer = document.getElementById('purchase-message')
+        const purchaseBtn = document.getElementById('confirm-purchase-btn')
+
+        if (purchaseBtn) {
+            purchaseBtn.disabled = true
+            purchaseBtn.textContent = 'Procesando compra...'
+        }
+
+        try {
+            const user = getUserInfo()
+
+            // Recopilar todos los IDs de boletos según las selecciones
+            const allBoletosIds = []
+
+            for (const selection of selectedTickets) {
+                const boletosDelTipo = this.state.boletosDisponibles
+                    .filter(b => b.tipo === selection.tipo)
+                    .slice(0, selection.cantidad)
+
+                if (boletosDelTipo.length < selection.cantidad) {
+                    throw new Error(`No hay suficientes boletos ${selection.tipo} disponibles`)
+                }
+
+                allBoletosIds.push(...boletosDelTipo.map(b => b.id))
+            }
+
+            // Calcular el total para mostrarlo al usuario (el backend también lo calculará)
+            const totalAmount = selectedTickets.reduce(
+                (sum, t) => sum + (t.precio * t.cantidad),
+                0
+            )
+
+            // Crear la orden con el formato correcto del backend
+            const { data, error } = await post('/ordenes', {
+                usuarioId: user.id,
+                boletoIds: allBoletosIds
+            })
+
+            if (error) {
+                throw new Error(error)
+            }
+
+            const orden = data.orden || data
+            console.log('✅ Orden creada:', orden)
+
+            // Mostrar mensaje de éxito con detalles
+            const ticketsSummary = selectedTickets
+                .map(t => `${t.cantidad}× ${t.tipo}`)
+                .join(', ')
+
+            messageContainer.innerHTML = `
+                <div class="alert alert-success">
+                    ✅ ¡Compra exitosa!
+                    <br><br>
+                    <strong>Orden #${orden.id}</strong><br>
+                    ${ticketsSummary}<br>
+                    Total: $${totalAmount.toLocaleString('es-MX')}
+                    <br><br>
+                    ${Link('/mis-reservas', 'Ver mis boletos', 'btn btn-secondary')}
+                </div>
+            `
+
+            // Recargar la página después de 3 segundos
+            setTimeout(() => {
+                window.location.reload()
+            }, 3000)
+
+        } catch (error) {
+            console.error('❌ Error en la compra:', error)
+
+            messageContainer.innerHTML = `
+                <div class="alert alert-error">
+                    ❌ Error al procesar la compra: ${error.message}
+                </div>
+            `
+
+            // Rehabilitar el botón
+            if (purchaseBtn) {
+                purchaseBtn.disabled = false
+                purchaseBtn.textContent = 'Confirmar Compra'
+            }
+        }
     }
 
     updateState(newState) {
         this.state = {
             ...this.state,
             ...newState
+        }
+
+        // Si se actualiza la selección de tickets, actualizar solo el resumen
+        if (newState.selectedTickets !== undefined) {
+            this.updatePurchaseSummary()
+            return
         }
 
         // Re-renderizar solo el contenido (no toda la página)
@@ -398,8 +580,22 @@ export class EventDetailPage {
 
             // Re-setup event listeners después del re-render
             if (isAuthenticated()) {
-                this.setupPurchaseButton()
+                if (this.ticketsList) {
+                    this.ticketsList.afterRender()
+                }
+                this.setupPurchaseButtonFromSummary()
             }
+        }
+    }
+
+    /**
+     * Actualiza solo el resumen de compra sin re-renderizar toda la página
+     */
+    updatePurchaseSummary() {
+        const container = document.getElementById('purchase-summary-container')
+        if (container) {
+            container.innerHTML = this.renderPurchaseSummary()
+            this.setupPurchaseButtonFromSummary()
         }
     }
 }

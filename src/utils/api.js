@@ -15,7 +15,7 @@ axios.interceptors.request.use(
 
         if (token) {
             config.headers.Authorization = `Bearer ${token}`
-            console.log('🔑 Token agregado a la petición')
+            console.log(' Token agregado a la petición')
         }
 
         return config
@@ -36,7 +36,7 @@ axios.interceptors.response.use(
 
             // Si no está en login/signup, redirigir al login
             if (currentPath !== '/login' && currentPath !== '/signup') {
-                console.warn('⚠️ Token inválido o expirado. Redirigiendo al login...')
+                console.warn(' Token inválido o expirado. Redirigiendo al login...')
                 logout()
             }
         }
@@ -62,25 +62,25 @@ export async function get(endpoint) {
 
 export async function post(endpoint, body) {
     try {
-        console.log('📤 Enviando POST a:', `${API_BASE_URL}${endpoint}`)
-        console.log('📦 Body:', body)
+        console.log(' Enviando POST a:', `${API_BASE_URL}${endpoint}`)
+        console.log(' Body:', body)
 
         const response = await axios.post(`${API_BASE_URL}${endpoint}`, body)
 
-        console.log('✅ Respuesta exitosa:', response.data)
+        console.log(' Respuesta exitosa:', response.data)
         return { data: response.data, error: null }
     } catch (error) {
-        console.error('❌ Error en la petición POST:', error)
-        console.error('📍 URL:', `${API_BASE_URL}${endpoint}`)
-        console.error('📦 Body enviado:', body)
+        console.error(' Error en la petición POST:', error)
+        console.error(' URL:', `${API_BASE_URL}${endpoint}`)
+        console.error(' Body enviado:', body)
 
         // Extraer mensaje de error del backend
         const errorMessage = error.response?.data?.message
             || error.response?.data?.error
             || error.message
 
-        console.error('💬 Mensaje de error:', errorMessage)
-        console.error('🔢 Status code:', error.response?.status)
+        console.error(' Mensaje de error:', errorMessage)
+        console.error(' Status code:', error.response?.status)
 
         return {
             data: null,
@@ -98,7 +98,7 @@ export async function post(endpoint, body) {
  */
 export async function postFormData(endpoint, formData) {
     try {
-        console.log('📤 Enviando FormData POST a:', `${API_BASE_URL}${endpoint}`)
+        console.log(' Enviando FormData POST a:', `${API_BASE_URL}${endpoint}`)
 
         const response = await axios.post(`${API_BASE_URL}${endpoint}`, formData, {
             headers: {
@@ -106,19 +106,19 @@ export async function postFormData(endpoint, formData) {
             }
         })
 
-        console.log('✅ Respuesta exitosa:', response.data)
+        console.log(' Respuesta exitosa:', response.data)
         return { data: response.data, error: null }
     } catch (error) {
-        console.error('❌ Error en la petición POST FormData:', error)
-        console.error('📍 URL:', `${API_BASE_URL}${endpoint}`)
+        console.error(' Error en la petición POST FormData:', error)
+        console.error(' URL:', `${API_BASE_URL}${endpoint}`)
 
         // Extraer mensaje de error del backend
         const errorMessage = error.response?.data?.message
             || error.response?.data?.error
             || error.message
 
-        console.error('💬 Mensaje de error:', errorMessage)
-        console.error('🔢 Status code:', error.response?.status)
+        console.error(' Mensaje de error:', errorMessage)
+        console.error(' Status code:', error.response?.status)
 
         return {
             data: null,

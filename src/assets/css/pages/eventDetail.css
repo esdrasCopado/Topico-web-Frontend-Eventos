@@ -395,8 +395,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 16px;
-    border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .ticket-price {
@@ -526,6 +524,159 @@
     }
 
     .ticket-price {
+        font-size: 20px;
+    }
+}
+
+/* ========================================
+   PURCHASE SUMMARY IN SIDEBAR
+======================================== */
+
+/* Empty state */
+.purchase-summary-empty {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.purchase-summary-empty .summary-icon {
+    font-size: 48px;
+    display: block;
+    margin-bottom: 16px;
+    opacity: 0.6;
+}
+
+.purchase-summary-empty h4 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #24292f;
+    margin: 0 0 8px 0;
+}
+
+.purchase-summary-empty p {
+    font-size: 14px;
+    color: #57606a;
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* Summary content */
+.purchase-summary-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.purchase-summary-content h4 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #24292f;
+    margin: 0;
+    padding-bottom: 16px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.08);
+}
+
+/* Summary items list */
+.summary-items {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: rgba(9, 105, 218, 0.05);
+    border-radius: 8px;
+    border-left: 3px solid #0969da;
+}
+
+.summary-item-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.summary-item-type {
+    font-size: 14px;
+    font-weight: 600;
+    color: #24292f;
+}
+
+.summary-item-qty {
+    font-size: 13px;
+    color: #57606a;
+    background: rgba(0, 0, 0, 0.1);
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+
+.summary-item-price {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0969da;
+}
+
+/* Summary totals */
+.summary-totals {
+    padding-top: 16px;
+    border-top: 2px solid rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.summary-total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: #57606a;
+}
+
+.summary-total-row.total {
+    padding-top: 12px;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    font-size: 16px;
+    font-weight: 700;
+    color: #24292f;
+}
+
+.summary-total-amount {
+    font-weight: 600;
+    color: #24292f;
+}
+
+.summary-total-amount-final {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0969da;
+}
+
+/* Animation when items change */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.summary-item {
+    animation: fadeInUp 0.3s ease;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .purchase-summary-content {
+        gap: 16px;
+    }
+
+    .summary-total-amount-final {
         font-size: 20px;
     }
 }
