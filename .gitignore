@@ -30,3 +30,5 @@ pnpm-debug.log*
 
 # Cache
 .cache/
+
+public/

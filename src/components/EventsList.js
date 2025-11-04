@@ -11,11 +11,14 @@ export class EventsList {
         this.state = {
             eventos: [],
             loading: true,
-            error: null
+            error: null,
+            currentIndex: 0,  // Índice actual del carrusel
+            itemsPerView: 4   // Elementos visibles por vista
         }
 
         this.id = `events-list-${Math.random().toString(36).substr(2, 9)}`
         this.mounted = false  // Flag para saber si ya está montado
+        this.isAnimating = false  // Flag para evitar múltiples clicks durante animación
     }
 
     /**
@@ -101,17 +104,102 @@ export class EventsList {
      * Renderiza el componente
      */
     render() {
+        const showPrevBtn = this.state.currentIndex > 0
+        const showNextBtn = this.state.currentIndex < this.state.eventos.length - this.state.itemsPerView
+
         return `
             <div id="${this.id}" class="events-list">
                 <h2>Eventos Disponibles</h2>
-                
-                <div class="events-container">
-                    ${this.state.loading ? this.renderLoading() : ''}
-                    ${this.state.error ? this.renderError() : ''}
-                    ${!this.state.loading && !this.state.error ? this.renderEventos() : ''}
+
+                <div class="carousel-wrapper">
+                    ${showPrevBtn && !this.state.loading && !this.state.error ? `
+                        <button class="carousel-btn carousel-btn-prev" id="${this.id}-prev" aria-label="Anterior">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="15 18 9 12 15 6"></polyline>
+                            </svg>
+                        </button>
+                    ` : ''}
+
+                    <div class="events-container-wrapper">
+                        <div class="events-container" style="transform: translateX(-${this.state.currentIndex * (100 / this.state.itemsPerView)}%)">
+                            ${this.state.loading ? this.renderLoading() : ''}
+                            ${this.state.error ? this.renderError() : ''}
+                            ${!this.state.loading && !this.state.error ? this.renderEventos() : ''}
+                        </div>
+                    </div>
+
+                    ${showNextBtn && !this.state.loading && !this.state.error ? `
+                        <button class="carousel-btn carousel-btn-next" id="${this.id}-next" aria-label="Siguiente">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </button>
+                    ` : ''}
                 </div>
             </div>
         `
+    }
+
+    /**
+     * Navega al anterior conjunto de elementos
+     */
+    handlePrev() {
+        if (this.isAnimating || this.state.currentIndex === 0) return
+
+        this.isAnimating = true
+        this.setState({ currentIndex: Math.max(0, this.state.currentIndex - this.state.itemsPerView) })
+
+        setTimeout(() => {
+            this.isAnimating = false
+        }, 600) // Duración de la animación CSS
+    }
+
+    /**
+     * Navega al siguiente conjunto de elementos
+     */
+    handleNext() {
+        if (this.isAnimating) return
+
+        const maxIndex = this.state.eventos.length - this.state.itemsPerView
+
+        // Si llegamos al final, volver al inicio
+        if (this.state.currentIndex >= maxIndex) {
+            this.isAnimating = true
+            this.setState({ currentIndex: 0 })
+            setTimeout(() => {
+                this.isAnimating = false
+            }, 600)
+            return
+        }
+
+        this.isAnimating = true
+        this.setState({
+            currentIndex: Math.min(maxIndex, this.state.currentIndex + this.state.itemsPerView)
+        })
+
+        setTimeout(() => {
+            this.isAnimating = false
+        }, 600)
+    }
+
+    /**
+     * Ajusta itemsPerView según el tamaño de pantalla
+     */
+    updateItemsPerView() {
+        const width = window.innerWidth
+        let itemsPerView = 4
+
+        if (width < 640) {
+            itemsPerView = 1
+        } else if (width < 1024) {
+            itemsPerView = 2
+        } else if (width < 1280) {
+            itemsPerView = 3
+        }
+
+        if (this.state.itemsPerView !== itemsPerView) {
+            this.setState({ itemsPerView, currentIndex: 0 })
+        }
     }
 
     /**
@@ -127,14 +215,49 @@ export class EventsList {
 
         this.mounted = true
 
+        // Ajustar itemsPerView según tamaño de pantalla
+        this.updateItemsPerView()
+
+        // Listener para cambios de tamaño de ventana
+        this.resizeHandler = () => this.updateItemsPerView()
+        window.addEventListener('resize', this.resizeHandler)
+
         // Hacer petición inicial (como useEffect([]))
         this.fetchEventos()
 
-        // Event listener para reintentar
+        // Event listeners
+        this.attachEventListeners()
+    }
+
+    /**
+     * Adjunta los event listeners a los botones
+     */
+    attachEventListeners() {
+        const prevBtn = document.getElementById(`${this.id}-prev`)
+        const nextBtn = document.getElementById(`${this.id}-next`)
         const retryBtn = document.getElementById(`${this.id}-retry`)
+
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => this.handlePrev())
+        }
+
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => this.handleNext())
+        }
+
         if (retryBtn) {
             retryBtn.addEventListener('click', () => this.fetchEventos())
         }
+    }
+
+    /**
+     * Limpia los event listeners cuando se desmonta
+     */
+    unmount() {
+        if (this.resizeHandler) {
+            window.removeEventListener('resize', this.resizeHandler)
+        }
+        this.mounted = false
     }
 
     /**
@@ -147,11 +270,8 @@ export class EventsList {
             temp.innerHTML = this.render()
             container.outerHTML = temp.innerHTML
 
-            // Solo re-montar event listeners (NO hacer fetch de nuevo)
-            const retryBtn = document.getElementById(`${this.id}-retry`)
-            if (retryBtn) {
-                retryBtn.addEventListener('click', () => this.fetchEventos())
-            }
+            // Re-montar event listeners
+            this.attachEventListeners()
         }
     }
 }

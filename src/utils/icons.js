@@ -153,8 +153,10 @@ export const Icons = {
         </svg>
     `,
     events: `
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-            <path d="M12 2H4a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V3a1 1 0 00-1-1zM4 3h8v1H4V3zm0 2h8v8H4V5zM7.5 8a.5.5 0 010-1h1a.5.5 0 010 1h-1z"/>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 1H12C12.5523 1 13 1.44772 13 2V14L11.5 12.5L8 15L4.5 12.5L3 14V2C3 1.44772 3.44772 1 4 1Z"/>
+            <line x1="6" y1="5" x2="10" y2="5"/>
+            <line x1="6" y1="8" x2="10" y2="8"/>
         </svg>
     `                            
 }

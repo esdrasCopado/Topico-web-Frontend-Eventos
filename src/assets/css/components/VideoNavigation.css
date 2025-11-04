@@ -1,0 +1,129 @@
+/* ============================================
+   VIDEO NAVIGATION BUTTONS
+   ============================================ */
+
+/* Contenedor de los botones de navegación */
+.video-navigation {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+    z-index: 5;  /* Menor que los controles de video */
+    padding: 0 30px;
+    max-width: 100%;
+}
+
+/* Botones individuales */
+.video-nav-btn {
+    pointer-events: all;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.8;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.video-nav-btn:hover {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.85);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.15);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+}
+
+.video-nav-btn:active {
+    transform: scale(1);
+}
+
+.video-nav-btn:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+    background: rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.video-nav-btn:disabled:hover {
+    transform: scale(1);
+    background: rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Iconos SVG dentro de los botones */
+.video-nav-btn svg {
+    width: 26px;
+    height: 26px;
+    stroke-width: 2.5;
+}
+
+/* Botón anterior (izquierda) */
+.video-nav-prev {
+    /* Estilos adicionales si es necesario */
+}
+
+/* Botón siguiente (derecha) */
+.video-nav-next {
+    /* Estilos adicionales si es necesario */
+}
+
+/* Indicador de video actual (opcional) */
+.video-nav-indicator {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    pointer-events: none;
+    z-index: 11;
+}
+
+.video-nav-dot {
+    width: 8px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.video-nav-dot.active {
+    background: white;
+    width: 24px;
+    border-radius: 4px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .video-navigation {
+        padding: 0 10px;
+    }
+
+    .video-nav-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .video-nav-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+/* Ocultar botones cuando no hay múltiples videos */
+.video-navigation.single-video {
+    display: none;
+}

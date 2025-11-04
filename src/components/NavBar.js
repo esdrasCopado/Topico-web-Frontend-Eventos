@@ -278,5 +278,29 @@ export class NavBar {
 
     mount() {
         this.afterRender()
+        this.setupScrollEffect()
+    }
+
+    /**
+     * Configura el efecto de scroll del navbar
+     * Cambia de transparente a sólido cuando se hace scroll
+     */
+    setupScrollEffect() {
+        const navbar = document.getElementById(this.id)
+        if (!navbar) return
+
+        const handleScroll = () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled')
+            } else {
+                navbar.classList.remove('scrolled')
+            }
+        }
+
+        // Llamar una vez al cargar para establecer el estado inicial
+        handleScroll()
+
+        // Escuchar el scroll
+        window.addEventListener('scroll', handleScroll, { passive: true })
     }
 }

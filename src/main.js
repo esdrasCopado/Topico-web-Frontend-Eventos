@@ -1,16 +1,20 @@
 // Importar estilos globales
 import './assets/css/global.css'
 import './assets/css/components.css'
+import './assets/css/components/VideoPlayer.css'
+import './assets/css/components/videoControls.css'
 import './assets/css/components/NavBar.css'
 import './assets/css/components/UserDropdown.css'
 import './assets/css/components/ImageDrop.css'
-import './assets/css/pages/home.css'
 import './assets/css/pages/dashboard.css'
 import './assets/css/pages/eventDetail.css'
 // Nota: Tikets.css se carga solo en createTickets.js
 
 // Importar Router
 import Router from './router.js'
+
+// Importar Lenis para smooth scroll
+import { initSmoothScroll } from './utils/smoothScroll.js'
 
 // Importar servicios de autenticación
 import { authGuard, guestGuard, ROLES } from './services/auth.js'
@@ -132,6 +136,12 @@ const routes = [
 ]
 
 function init() {
+    // Inicializar smooth scroll (Lenis)
+    const lenis = initSmoothScroll()
+
+    // Hacer la instancia de Lenis accesible globalmente si es necesario
+    window.lenis = lenis
+
     // Crear instancia del router
     const router = new Router(routes)
 

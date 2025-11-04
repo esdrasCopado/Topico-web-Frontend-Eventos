@@ -196,6 +196,14 @@ export class EventDetailPage {
     async afterRender() {
         this.navbar.afterRender()
 
+        // Scroll suave al inicio de la página
+        if (window.lenis) {
+            window.lenis.scrollTo(0, {
+                duration: 0.8,
+                easing: (t) => t * (2 - t)
+            })
+        }
+
         // Cargar datos del evento
         await this.loadEvent()
 

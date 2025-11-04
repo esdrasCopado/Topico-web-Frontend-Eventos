@@ -1,6 +1,7 @@
 /* ===== DASHBOARD STYLES ===== */
 
 .page-container {
+    
     max-width: 1200px;
     margin: 5px auto;
     padding: 40px 20px;
@@ -384,7 +385,7 @@
 /* Responsive */
 @media (max-width: 768px) {
     .page-container {
-        padding: 24px 16px;
+        padding: 550px 0 0 0 ;
     }
 
     .dashboard-header h1 {
