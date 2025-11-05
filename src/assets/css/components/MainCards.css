@@ -76,11 +76,7 @@
     height: 450px;
 }
 
-.event-card:hover {
-    border-color: rgba(96, 165, 250, 0.5);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(96, 165, 250, 0.3);
-    transform: translateY(-6px);
-}
+
 
 .event-image-container {
     position: absolute;
@@ -103,7 +99,6 @@
 }
 
 .event-card:hover .event-image {
-    transform: scale(1.1);
     filter: brightness(0.4);
 }
 
@@ -242,6 +237,54 @@
 
 .event-card:hover .event-cta svg {
     transform: translateX(4px);
+}
+/* Botones de navegación del carrusel */
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background: rgba(20, 20, 25, 0);
+    border: none;
+    color: rgba(255, 255, 255, 0.9);
+    width: 60px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+}
+
+.carousel-wrapper:hover .carousel-btn {
+    opacity: 1;
+}
+
+.carousel-btn:hover {
+    background: rgba(20, 20, 25, 0.7);
+}
+.carousel-btn:hover svg {
+    transform: scale(1.2);
+}
+
+.carousel-btn:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.carousel-btn svg {
+    width: 32px;
+    height: 32px;
+    transition: all 0.3s ease;
+}
+
+
+.carousel-btn-prev {
+    left: 1%;
+}
+
+.carousel-btn-next {
+    right: 1%;
 }
 
 /* Responsive adjustments */

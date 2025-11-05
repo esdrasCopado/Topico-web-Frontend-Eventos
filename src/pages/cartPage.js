@@ -1,3 +1,4 @@
+import '../assets/css/pages/cartPage.css'
 import { NavBar } from '../components/NavBar.js'
 import { Icons } from '../utils/icons.js'
 import { getUserInfo } from '../services/auth.js'

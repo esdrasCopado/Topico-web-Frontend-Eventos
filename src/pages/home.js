@@ -19,6 +19,7 @@ export class HomePage {
             currentPath: window.location.pathname
         })
         this.eventsList = new EventsList()
+        this.eventsList2 = new EventsList()  // Segunda instancia independiente
 
         this.heroVideo = new VideoPlayer({
             sourceUrl: '/source.json',           // Cargar videos desde JSON
@@ -71,6 +72,7 @@ export class HomePage {
             <div class="page-container">
                 <div id="hero-container" class="hero" style="position: relative; overflow: hidden;">
                     ${this.eventsList.render()}
+                    ${this.eventsList2.render()}
                 </div>
             </div>
         `
@@ -97,6 +99,7 @@ export class HomePage {
         this.videoNavigation.mount()
 
         this.eventsList.mount()  // ← Esto hace la petición HTTP!
+        this.eventsList2.mount() // Montar la segunda lista
 
         // Inicializar auto-scroll después de que todo esté montado
         this.cleanupAutoScroll = initAutoScroll({

@@ -26,7 +26,7 @@ import { SignUpPage } from './pages/signUp.js'
 import { NotFoundPage } from './pages/notFound.js'
 import { UnauthorizedPage } from './pages/unauthorized.js'
 import { EventDetailPage } from './pages/eventDetail.js'
-import { CartPurchasePage } from './pages/cartPurchase.js'
+import { CartPurchasePage } from './pages/cartPage.js'
 
 // Importar páginas protegidas por rol
 import { AdminDashboardPage } from './pages/admin/dashboard.js'

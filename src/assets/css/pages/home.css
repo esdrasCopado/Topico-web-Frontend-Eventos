@@ -80,8 +80,6 @@ body:has(.video-background) {
 
 /* Events List Section */
 .events-list {
-    margin: var(--spacing-xl) 0;
-    padding: var(--spacing-lg) 0;
     border-radius: var(--border-radius);
     max-width: 100%;
     position: relative;
@@ -92,7 +90,6 @@ body:has(.video-background) {
     margin-bottom: var(--spacing-lg);
     color: var(--white);
     font-size: var(--font-size-3xl);
-    padding-left: 3%;
 }
 
 /* Carousel Wrapper */
@@ -101,11 +98,13 @@ body:has(.video-background) {
     width: 100%;
 }
 
-/* Events Container Wrapper - Oculta overflow */
+/* Events Container Wrapper - Muestra elemento cortado al final */
 .events-container-wrapper {
     overflow: hidden;
     position: relative;
     padding: 0 3%;
+    /* Añadir espacio extra a la derecha para mostrar 60px del siguiente elemento */
+    padding-right: calc(3% + 60px);
 }
 
 /* Events Container - Carrusel horizontal */
@@ -120,58 +119,23 @@ body:has(.video-background) {
     flex: 0 0 calc((100% - (var(--spacing-lg) * 3)) / 4);
     max-width: calc((100% - (var(--spacing-lg) * 3)) / 4);
     min-width: 280px;
+    position: relative;
 }
 
-/* Botones de navegación del carrusel */
-.carousel-btn {
+/* Sombra oscura para el elemento cortado (parcialmente visible) */
+.event-card-clipped::after {
+    content: '';
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 10;
-    background: rgba(20, 20, 25, 0.9);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.9);
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-    opacity: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.6) 100%);
+    pointer-events: none;
+    z-index: 2;
+    border-radius: 12px;
 }
 
-.carousel-wrapper:hover .carousel-btn {
-    opacity: 1;
-}
-
-.carousel-btn:hover {
-    background: rgba(96, 165, 250, 0.3);
-    border-color: rgba(96, 165, 250, 0.5);
-    color: rgba(96, 165, 250, 1);
-    transform: translateY(-50%) scale(1.1);
-    box-shadow: 0 6px 20px rgba(96, 165, 250, 0.4);
-}
-
-.carousel-btn:active {
-    transform: translateY(-50%) scale(0.95);
-}
-
-.carousel-btn svg {
-    width: 28px;
-    height: 28px;
-}
-
-.carousel-btn-prev {
-    left: 1%;
-}
-
-.carousel-btn-next {
-    right: 1%;
-}
 
 /* No Events Message */
 .no-events {

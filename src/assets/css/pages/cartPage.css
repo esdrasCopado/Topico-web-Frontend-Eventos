@@ -1,0 +1,270 @@
+/* ========================================
+   10. CARRITO DE COMPRAS - DARK MODE
+======================================== */
+body {
+    background: var(--dark-bg, #0f1419);    
+}
+
+.cart-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-xl);
+    background: var(--dark-bg, #0f1419);
+    min-height: 100vh;
+}
+
+.cart-header {
+    margin-bottom: var(--spacing-xl);
+    text-align: center;
+}
+
+.cart-header h1 {
+    font-size: var(--font-size-3xl);
+    color: var(--dark-text, #e8eaed);
+    margin-bottom: var(--spacing-xs);
+}
+
+.cart-header p {
+    color: var(--dark-text-secondary, #9aa0a6);
+    font-size: var(--font-size-base);
+}
+
+.cart-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--spacing-xl);
+    align-items: start;
+}
+
+.cart-ordenes-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.cart-orden-card {
+    background: var(--dark-card, #1a1f2e);
+    border: 1px solid var(--dark-border, rgba(255, 255, 255, 0.1));
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
+    transition: var(--transition);
+}
+
+.cart-orden-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    border-color: var(--primary-color);
+    background: var(--dark-card-hover, #222837);
+}
+
+.orden-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.orden-header h3 {
+    font-size: var(--font-size-xl);
+    color: var(--dark-text, #e8eaed);
+    margin: 0;
+}
+
+.orden-date {
+    font-size: var(--font-size-sm);
+    color: var(--dark-text-secondary, #9aa0a6);
+    margin-top: 4px;
+}
+
+.orden-status {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+}
+
+.status-pending {
+    background: rgba(255, 193, 7, 0.15);
+    color: #ffc107;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.status-completed {
+    background: rgba(76, 175, 80, 0.15);
+    color: #4caf50;
+    border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.status-cancelled {
+    background: rgba(244, 67, 54, 0.15);
+    color: #f44336;
+    border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
+.orden-tickets h4 {
+    font-size: var(--font-size-base);
+    color: var(--dark-text, #e8eaed);
+    margin-bottom: var(--spacing-sm);
+}
+
+.cart-ticket-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-sm);
+    background: var(--dark-bg-secondary, rgba(255, 255, 255, 0.05));
+    border-radius: var(--border-radius);
+    margin-bottom: var(--spacing-xs);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.ticket-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.ticket-type {
+    font-weight: var(--font-weight-semibold);
+    color: var(--dark-text, #e8eaed);
+    font-size: var(--font-size-base);
+}
+
+.ticket-id {
+    font-size: var(--font-size-xs);
+    color: var(--dark-text-secondary, #9aa0a6);
+}
+
+.ticket-price {
+    font-weight: var(--font-weight-bold);
+    color: var(--primary-color);
+    font-size: var(--font-size-lg);
+}
+
+.orden-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.orden-total {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.orden-total span:first-child {
+    font-size: var(--font-size-sm);
+    color: var(--dark-text-secondary, #9aa0a6);
+}
+
+.total-amount {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--dark-text, #e8eaed);
+}
+
+/* Resumen de compra */
+.cart-summary {
+    background: var(--dark-card, #1a1f2e);
+    border: 1px solid var(--dark-border, rgba(255, 255, 255, 0.1));
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
+    position: sticky;
+    top: 100px;
+}
+
+.cart-summary h3 {
+    font-size: var(--font-size-xl);
+    color: var(--dark-text, #e8eaed);
+    margin-bottom: var(--spacing-md);
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-sm) 0;
+    font-size: var(--font-size-base);
+    color: var(--dark-text-secondary, #9aa0a6);
+}
+
+.summary-row.total {
+    border-top: 2px solid rgba(255, 255, 255, 0.1);
+    margin-top: var(--spacing-sm);
+    padding-top: var(--spacing-md);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-lg);
+    color: var(--dark-text, #e8eaed);
+}
+
+.summary-row span:last-child {
+    font-weight: var(--font-weight-semibold);
+    color: var(--dark-text, #e8eaed);
+}
+
+.btn-block {
+    width: 100%;
+    margin-top: var(--spacing-md);
+}
+
+/* Estado vacío */
+.empty-cart {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-3xl);
+    text-align: center;
+}
+
+.empty-cart svg {
+    color: var(--dark-text-secondary, #9aa0a6);
+    margin-bottom: var(--spacing-lg);
+}
+
+.empty-cart h2 {
+    font-size: var(--font-size-2xl);
+    color: var(--dark-text, #e8eaed);
+    margin-bottom: var(--spacing-sm);
+}
+
+.empty-cart p {
+    font-size: var(--font-size-base);
+    color: var(--dark-text-secondary, #9aa0a6);
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Spinner de carga */
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto var(--spacing-md);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design - Dark Mode */
+@media (max-width: 768px) {
+    .cart-content {
+        grid-template-columns: 1fr;
+    }
+
+    .cart-summary {
+        position: relative;
+        top: 0;
+    }
+}

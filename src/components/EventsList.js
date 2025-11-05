@@ -12,8 +12,9 @@ export class EventsList {
             eventos: [],
             loading: true,
             error: null,
-            currentIndex: 0,  // Índice actual del carrusel
-            itemsPerView: 4   // Elementos visibles por vista
+            currentIndex: 0,  // Índice actual del carrusel (siempre empieza en 0)
+            itemsPerView: 4,  // Elementos visibles por vista
+            clippedElementWidth: 60  // Ancho en px del elemento cortado
         }
 
         this.id = `events-list-${Math.random().toString(36).substr(2, 9)}`
@@ -28,9 +29,58 @@ export class EventsList {
     setState(newState, shouldRerender = true) {
         this.state = { ...this.state, ...newState }
 
-        // Solo re-renderizar si ya está montado
+        // Solo actualizar la posición del carrusel sin re-renderizar todo
         if (shouldRerender && this.mounted) {
-            this.reRender()
+            this.updateCarouselPosition()
+        }
+    }
+
+    /**
+     * Actualiza solo la posición del carrusel y las clases sin re-renderizar
+     */
+    updateCarouselPosition() {
+        const container = document.getElementById(`${this.id}-container`)
+        if (container) {
+            // Actualizar transform
+            container.style.transform = `translateX(-${this.calculateTranslateX()}%)`
+
+            // Actualizar clase del elemento cortado
+            this.updateClippedClass()
+
+            // Actualizar visibilidad de botones
+            this.updateButtonsVisibility()
+        }
+    }
+
+    /**
+     * Actualiza la clase del elemento cortado dinámicamente
+     */
+    updateClippedClass() {
+        const container = document.getElementById(`${this.id}-container`)
+        if (!container) return
+
+        // Remover clase de todos los elementos
+        const allCards = container.querySelectorAll('.event-card-clipped')
+        allCards.forEach(card => card.classList.remove('event-card-clipped'))
+
+        // Agregar clase al elemento cortado actual
+        const clippedIndex = this.state.currentIndex + this.state.itemsPerView
+        const clippedCard = container.querySelector(`[data-carousel-index="${clippedIndex}"]`)
+        if (clippedCard) {
+            clippedCard.classList.add('event-card-clipped')
+        }
+    }
+
+    /**
+     * Actualiza la visibilidad de los botones
+     */
+    updateButtonsVisibility() {
+        const prevBtn = document.getElementById(`${this.id}-prev`)
+
+        const showPrev = this.state.currentIndex > 0
+
+        if (prevBtn) {
+            prevBtn.style.display = showPrev ? 'flex' : 'none'
         }
     }
 
@@ -39,8 +89,12 @@ export class EventsList {
      * Similar a una función en useEffect
      */
     async fetchEventos() {
-        // Indicar que está cargando
-        this.setState({ loading: true, error: null })
+        // Indicar que está cargando - necesita re-render completo
+        this.state.loading = true
+        this.state.error = null
+        if (this.mounted) {
+            this.reRender()
+        }
 
         // Hacer petición
         const { data, error } = await get('/eventos')
@@ -49,18 +103,20 @@ export class EventsList {
 
         if (error) {
             console.error(' Error en fetchEventos:', error)
-            this.setState({
-                error: error,
-                loading: false
-            })
+            this.state.error = error
+            this.state.loading = false
+            if (this.mounted) {
+                this.reRender()
+            }
             return
         }
 
-        // Actualizar estado con los datos
-        this.setState({
-            eventos: data,
-            loading: false
-        })
+        // Actualizar estado con los datos - necesita re-render completo
+        this.state.eventos = data
+        this.state.loading = false
+        if (this.mounted) {
+            this.reRender()
+        }
     }
 
     /**
@@ -87,25 +143,64 @@ export class EventsList {
     }
 
     /**
-     * Renderiza la lista de eventos
+     * Renderiza la lista de eventos con clones para efecto infinito
      */
     renderEventos() {
         if (this.state.eventos.length === 0) {
             return '<p class="no-events">No hay eventos disponibles</p>'
         }
 
-        return this.state.eventos.map(evento => {
+        // Crear carrusel infinito: [original] + [clone completo]
+        // Esto permite la navegación infinita sin saltos visuales
+        const eventosInfinitos = [...this.state.eventos, ...this.state.eventos]
+
+        return eventosInfinitos.map((evento, index) => {
             const eventCard = new EventCard(evento)
-            return eventCard.render()
+            const cardHtml = eventCard.render()
+            const isClone = index >= this.state.eventos.length
+
+            // Marcar clones - la clase "event-card-clipped" se agrega dinámicamente con JS
+            return cardHtml.replace(
+                '<a ',
+                `<a data-carousel-index="${index}" data-is-clone="${isClone}" `
+            )
         }).join('')
+    }
+
+    /**
+     * Calcula el translateX para posicionar el carrusel
+     * El primer elemento siempre tiene un offset para mostrar el siguiente elemento cortado
+     */
+    calculateTranslateX() {
+        const { currentIndex, itemsPerView } = this.state
+
+        // Cada elemento ocupa 100/itemsPerView del ancho del contenedor
+        const itemWidthPercent = 100 / itemsPerView
+
+        // Desplazamiento por el índice actual
+        const indexOffset = currentIndex * itemWidthPercent
+
+        return indexOffset
+    }
+
+    /**
+     * Calcula el ancho del elemento cortado como porcentaje
+     */
+    getClippedWidthPercent() {
+        const containerWidth = document.querySelector('.events-container-wrapper')?.offsetWidth || 1200
+        const { clippedElementWidth } = this.state
+        return (clippedElementWidth / containerWidth) * 100
     }
 
     /**
      * Renderiza el componente
      */
     render() {
-        const showPrevBtn = this.state.currentIndex > 0
-        const showNextBtn = this.state.currentIndex < this.state.eventos.length - this.state.itemsPerView
+        const hasEvents = this.state.eventos.length > 0
+        // Botón prev solo se muestra cuando currentIndex > 0
+        const showPrevBtn = hasEvents && this.state.currentIndex > 0
+        // Botón next siempre visible si hay eventos (carrusel infinito)
+        const showNextBtn = hasEvents
 
         return `
             <div id="${this.id}" class="events-list">
@@ -121,7 +216,7 @@ export class EventsList {
                     ` : ''}
 
                     <div class="events-container-wrapper">
-                        <div class="events-container" style="transform: translateX(-${this.state.currentIndex * (100 / this.state.itemsPerView)}%)">
+                        <div class="events-container" id="${this.id}-container" style="transform: translateX(-${this.calculateTranslateX()}%)">
                             ${this.state.loading ? this.renderLoading() : ''}
                             ${this.state.error ? this.renderError() : ''}
                             ${!this.state.loading && !this.state.error ? this.renderEventos() : ''}
@@ -141,13 +236,15 @@ export class EventsList {
     }
 
     /**
-     * Navega al anterior conjunto de elementos
+     * Navega al anterior elemento
      */
     handlePrev() {
         if (this.isAnimating || this.state.currentIndex === 0) return
 
         this.isAnimating = true
-        this.setState({ currentIndex: Math.max(0, this.state.currentIndex - this.state.itemsPerView) })
+
+        // Retroceder un elemento
+        this.setState({ currentIndex: this.state.currentIndex - 1 })
 
         setTimeout(() => {
             this.isAnimating = false
@@ -155,31 +252,50 @@ export class EventsList {
     }
 
     /**
-     * Navega al siguiente conjunto de elementos
+     * Navega al siguiente elemento (carrusel infinito)
      */
     handleNext() {
         if (this.isAnimating) return
 
-        const maxIndex = this.state.eventos.length - this.state.itemsPerView
+        this.isAnimating = true
 
-        // Si llegamos al final, volver al inicio
-        if (this.state.currentIndex >= maxIndex) {
-            this.isAnimating = true
-            this.setState({ currentIndex: 0 })
+        const newIndex = this.state.currentIndex + 1
+        const totalEventos = this.state.eventos.length
+
+        // Si llegamos al final del primer set, hacer el salto instantáneo al clon
+        if (newIndex >= totalEventos) {
+            // Primero mostramos la animación hacia el clon
+            this.setState({ currentIndex: newIndex })
+
+            // Después de la animación, saltar instantáneamente al inicio sin animación
+            setTimeout(() => {
+                const container = document.getElementById(`${this.id}-container`)
+                if (container) {
+                    // Desactivar transición temporalmente
+                    container.style.transition = 'none'
+
+                    // Saltar al inicio (índice 0)
+                    this.setState({ currentIndex: 0 }, false)
+
+                    // Forzar reflow
+                    container.offsetHeight
+
+                    // Reactivar transición
+                    setTimeout(() => {
+                        container.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)'
+                        this.isAnimating = false
+                    }, 50)
+                } else {
+                    this.isAnimating = false
+                }
+            }, 600)
+        } else {
+            // Navegación normal
+            this.setState({ currentIndex: newIndex })
             setTimeout(() => {
                 this.isAnimating = false
             }, 600)
-            return
         }
-
-        this.isAnimating = true
-        this.setState({
-            currentIndex: Math.min(maxIndex, this.state.currentIndex + this.state.itemsPerView)
-        })
-
-        setTimeout(() => {
-            this.isAnimating = false
-        }, 600)
     }
 
     /**
@@ -223,7 +339,12 @@ export class EventsList {
         window.addEventListener('resize', this.resizeHandler)
 
         // Hacer petición inicial (como useEffect([]))
-        this.fetchEventos()
+        this.fetchEventos().then(() => {
+            // Inicializar la clase del elemento cortado después de cargar eventos
+            setTimeout(() => {
+                this.updateClippedClass()
+            }, 100)
+        })
 
         // Event listeners
         this.attachEventListeners()
