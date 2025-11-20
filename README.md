@@ -356,32 +356,31 @@ El proyecto usa variables CSS para mantener consistencia:
 ## Buenas Prácticas Implementadas
 
 ### Código
-- ✅ Componentes reutilizables y modulares
-- ✅ Separación de responsabilidades (SoC)
-- ✅ DRY (Don't Repeat Yourself)
-- ✅ Naming conventions consistentes
-- ✅ Comentarios en código complejo
-
+-  Componentes reutilizables y modulares
+-  Separación de responsabilidades (SoC)
+-  DRY (Don't Repeat Yourself)
+-  Naming conventions consistentes
+-  Comentarios en código complejo
 ### Seguridad
-- ✅ Tokens en localStorage (no cookies por simplicidad)
-- ✅ Guards de rutas para control de acceso
-- ✅ Validación de roles en frontend y backend
-- ✅ Sanitización de inputs
-- ✅ HTTPS en producción (recomendado)
+-  Tokens en localStorage (no cookies por simplicidad)
+-  Guards de rutas para control de acceso
+-  Validación de roles en frontend y backend
+-  Sanitización de inputs
+-  HTTPS en producción (recomendado)
 
 ### Performance
-- ✅ Lazy loading de imágenes
-- ✅ Código minificado en producción
-- ✅ Tree shaking con Vite
-- ✅ CSS optimizado
-- ✅ Peticiones HTTP optimizadas
+-  Lazy loading de imágenes
+-  Código minificado en producción
+-  Tree shaking con Vite
+-  CSS optimizado
+-  Peticiones HTTP optimizadas
 
 ### UX/UI
-- ✅ Feedback visual en todas las acciones
-- ✅ Loading states
-- ✅ Error handling amigable
-- ✅ Animaciones suaves
-- ✅ Diseño consistente
+-  Feedback visual en todas las acciones
+-  Loading states
+-  Error handling amigable
+-  Animaciones suaves
+-  Diseño consistente
 
 ## Próximas Funcionalidades
 
@@ -414,4 +413,4 @@ Para preguntas o sugerencias, contacta al equipo de desarrollo.
 
 ---
 
-**Desarrollado con ❤️ usando Vanilla JavaScript y Vite**
+**Desarrollado con usando Vanilla JavaScript y Vite**
