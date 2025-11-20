@@ -146,8 +146,8 @@ export class VideoPlayer {
         // No necesitamos _startRotation() con setInterval
     }
 
-    /**
-     * Carga videos desde un archivo JSON
+/**
+     * Carga videos desde un archivo JSON y selecciona uno al azar.
      * @private
      */
     async _loadVideosFromJson() {
@@ -166,9 +166,16 @@ export class VideoPlayer {
                 return
             }
 
-            // Usar el primer video
-            this.currentVideoIndex = 0
-            this._updateVideoSource(this.videos[0])
+            // --- CAMBIO AQUÍ: Seleccionar un video aleatorio ---
+
+            // 1. Generar un índice aleatorio
+            const randomIndex = Math.floor(Math.random() * this.videos.length)
+
+            // 2. Usar el índice aleatorio
+            this.currentVideoIndex = randomIndex
+            this._updateVideoSource(this.videos[randomIndex])
+
+            // --- FIN DEL CAMBIO ---
 
         } catch (error) {
             console.error(`VideoPlayer ${this.id}: Error cargando videos desde JSON:`, error)

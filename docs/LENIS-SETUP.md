@@ -234,12 +234,12 @@ afterRender() {
 
 ## Ventajas de Lenis
 
-✅ **Ligero**: ~3KB gzipped
-✅ **Rendimiento**: 60fps constantes
-✅ **Fácil de usar**: API simple e intuitiva
-✅ **Personalizable**: Múltiples opciones de configuración
-✅ **Compatible**: Funciona en todos los navegadores modernos
-✅ **Sin dependencias**: No requiere jQuery ni otras librerías
+- **Ligero**: ~3KB gzipped
+- **Rendimiento**: 60fps constantes
+- **Fácil de usar**: API simple e intuitiva
+- **Personalizable**: Múltiples opciones de configuración
+- **Compatible**: Funciona en todos los navegadores modernos
+- **Sin dependencias**: No requiere jQuery ni otras librerías
 
 ## Recursos
 

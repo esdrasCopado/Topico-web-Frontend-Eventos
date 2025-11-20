@@ -49,11 +49,29 @@ export class EventsList {
 
             // Actualizar visibilidad de botones
             this.updateButtonsVisibility()
+
+            // Actualizar indicadores activos
+            this.updateIndicators()
         }
     }
 
     /**
+     * Actualiza los indicadores de posición
+     */
+    updateIndicators() {
+        const indicators = document.querySelectorAll(`#${this.id} .carousel-indicator`)
+        indicators.forEach((indicator, index) => {
+            if (index === this.state.currentIndex) {
+                indicator.classList.add('active')
+            } else {
+                indicator.classList.remove('active')
+            }
+        })
+    }
+
+    /**
      * Actualiza la clase del elemento cortado dinámicamente
+     * Solo aplicamos sombra al elemento cortado de la derecha
      */
     updateClippedClass() {
         const container = document.getElementById(`${this.id}-container`)
@@ -63,11 +81,11 @@ export class EventsList {
         const allCards = container.querySelectorAll('.event-card-clipped')
         allCards.forEach(card => card.classList.remove('event-card-clipped'))
 
-        // Agregar clase al elemento cortado actual
-        const clippedIndex = this.state.currentIndex + this.state.itemsPerView
-        const clippedCard = container.querySelector(`[data-carousel-index="${clippedIndex}"]`)
-        if (clippedCard) {
-            clippedCard.classList.add('event-card-clipped')
+        // Elemento cortado a la DERECHA (quinto elemento visible)
+        const rightClippedIndex = this.state.currentIndex + this.state.itemsPerView
+        const rightClippedCard = container.querySelector(`[data-carousel-index="${rightClippedIndex}"]`)
+        if (rightClippedCard) {
+            rightClippedCard.classList.add('event-card-clipped')
         }
     }
 
@@ -169,18 +187,15 @@ export class EventsList {
 
     /**
      * Calcula el translateX para posicionar el carrusel
-     * El primer elemento siempre tiene un offset para mostrar el siguiente elemento cortado
      */
     calculateTranslateX() {
         const { currentIndex, itemsPerView } = this.state
 
-        // Cada elemento ocupa 100/itemsPerView del ancho del contenedor
+        // Cada elemento ocupa 100/itemsPerView del ancho
         const itemWidthPercent = 100 / itemsPerView
 
-        // Desplazamiento por el índice actual
-        const indexOffset = currentIndex * itemWidthPercent
-
-        return indexOffset
+        // Desplazamiento simple
+        return currentIndex * itemWidthPercent
     }
 
     /**
@@ -190,6 +205,33 @@ export class EventsList {
         const containerWidth = document.querySelector('.events-container-wrapper')?.offsetWidth || 1200
         const { clippedElementWidth } = this.state
         return (clippedElementWidth / containerWidth) * 100
+    }
+
+    /**
+     * Renderiza indicadores de posición (dots)
+     */
+    renderIndicators() {
+        if (this.state.eventos.length === 0) return ''
+
+        const totalSlides = this.state.eventos.length
+        const indicators = []
+
+        for (let i = 0; i < totalSlides; i++) {
+            const isActive = i === this.state.currentIndex
+            indicators.push(`
+                <button
+                    class="carousel-indicator ${isActive ? 'active' : ''}"
+                    data-index="${i}"
+                    aria-label="Ir al slide ${i + 1}"
+                ></button>
+            `)
+        }
+
+        return `
+            <div class="carousel-indicators">
+                ${indicators.join('')}
+            </div>
+        `
     }
 
     /**
@@ -230,6 +272,8 @@ export class EventsList {
                             </svg>
                         </button>
                     ` : ''}
+
+                    ${!this.state.loading && !this.state.error ? this.renderIndicators() : ''}
                 </div>
             </div>
         `
@@ -338,6 +382,27 @@ export class EventsList {
         this.resizeHandler = () => this.updateItemsPerView()
         window.addEventListener('resize', this.resizeHandler)
 
+        // Navegación con teclado (estilo Netflix)
+        this.keyboardHandler = (e) => {
+            // Solo funcionar si el carrusel está visible en el viewport
+            const container = document.getElementById(this.id)
+            if (!container) return
+
+            const rect = container.getBoundingClientRect()
+            const isVisible = rect.top < window.innerHeight && rect.bottom > 0
+
+            if (isVisible) {
+                if (e.key === 'ArrowRight') {
+                    e.preventDefault()
+                    this.handleNext()
+                } else if (e.key === 'ArrowLeft' && this.state.currentIndex > 0) {
+                    e.preventDefault()
+                    this.handlePrev()
+                }
+            }
+        }
+        window.addEventListener('keydown', this.keyboardHandler)
+
         // Hacer petición inicial (como useEffect([]))
         this.fetchEventos().then(() => {
             // Inicializar la clase del elemento cortado después de cargar eventos
@@ -369,6 +434,31 @@ export class EventsList {
         if (retryBtn) {
             retryBtn.addEventListener('click', () => this.fetchEventos())
         }
+
+        // Event listeners para los indicadores
+        const indicators = document.querySelectorAll(`#${this.id} .carousel-indicator`)
+        indicators.forEach((indicator) => {
+            indicator.addEventListener('click', (e) => {
+                const index = parseInt(e.target.dataset.index)
+                if (!isNaN(index) && index !== this.state.currentIndex) {
+                    this.goToSlide(index)
+                }
+            })
+        })
+    }
+
+    /**
+     * Navega a un slide específico
+     */
+    goToSlide(index) {
+        if (this.isAnimating) return
+
+        this.isAnimating = true
+        this.setState({ currentIndex: index })
+
+        setTimeout(() => {
+            this.isAnimating = false
+        }, 600)
     }
 
     /**
@@ -377,6 +467,9 @@ export class EventsList {
     unmount() {
         if (this.resizeHandler) {
             window.removeEventListener('resize', this.resizeHandler)
+        }
+        if (this.keyboardHandler) {
+            window.removeEventListener('keydown', this.keyboardHandler)
         }
         this.mounted = false
     }

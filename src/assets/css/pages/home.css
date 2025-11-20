@@ -98,13 +98,47 @@ body:has(.video-background) {
     width: 100%;
 }
 
-/* Events Container Wrapper - Muestra elemento cortado al final */
+/* Indicadores de posición (dots) - Estilo Netflix */
+.carousel-indicators {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 0 3%;
+    margin-top: 16px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.carousel-wrapper:hover .carousel-indicators {
+    opacity: 1;
+}
+
+.carousel-indicator {
+    width: 12px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.3);
+    border: none;
+    border-radius: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+}
+
+.carousel-indicator:hover {
+    background: rgba(255, 255, 255, 0.6);
+    transform: scaleY(1.5);
+}
+
+.carousel-indicator.active {
+    background: rgba(255, 255, 255, 0.9);
+    width: 24px;
+}
+
+/* Events Container Wrapper - Oculta overflow */
 .events-container-wrapper {
     overflow: hidden;
     position: relative;
     padding: 0 3%;
-    /* Añadir espacio extra a la derecha para mostrar 60px del siguiente elemento */
-    padding-right: calc(3% + 60px);
 }
 
 /* Events Container - Carrusel horizontal */

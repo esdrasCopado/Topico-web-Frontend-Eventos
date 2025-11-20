@@ -70,10 +70,24 @@
     overflow: hidden;
     text-decoration: none;
     color: inherit;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     height: 450px;
+    transform-origin: center center;
+}
+
+/* Efecto Netflix: Hover Scale y elevación */
+.event-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    z-index: 10;
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Delay del hover para que no sea tan sensible */
+.events-container {
+    padding: 20px 0;
 }
 
 
@@ -238,53 +252,52 @@
 .event-card:hover .event-cta svg {
     transform: translateX(4px);
 }
-/* Botones de navegación del carrusel */
+/* Botones de navegación del carrusel - Estilo Netflix */
 .carousel-btn {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 0;
+    bottom: 0;
     z-index: 10;
-    background: rgba(20, 20, 25, 0);
+    background: rgba(0, 0, 0, 0.5);
     border: none;
     color: rgba(255, 255, 255, 0.9);
-    width: 60px;
-    height: 100%;
+    width: 4%;
+    min-width: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease;
     opacity: 0;
 }
 
+/* Fade in suave al hacer hover en el carrusel */
 .carousel-wrapper:hover .carousel-btn {
     opacity: 1;
 }
 
+/* Efecto Netflix: Fondo más oscuro y escala al hover */
 .carousel-btn:hover {
-    background: rgba(20, 20, 25, 0.7);
-}
-.carousel-btn:hover svg {
-    transform: scale(1.2);
+    background: rgba(0, 0, 0, 0.75);
 }
 
-.carousel-btn:active {
-    transform: translateY(-50%) scale(0.95);
+.carousel-btn:hover svg {
+    transform: scale(1.2);
 }
 
 .carousel-btn svg {
     width: 32px;
     height: 32px;
-    transition: all 0.3s ease;
+    transition: transform 0.2s ease;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 }
 
-
 .carousel-btn-prev {
-    left: 1%;
+    left: 0;
 }
 
 .carousel-btn-next {
-    right: 1%;
+    right: 0;
 }
 
 /* Responsive adjustments */

@@ -104,14 +104,13 @@
 /* Asegurar que el contenido esté sobre el video */
 .video-background ~ .page-container {
     padding-top: 35%;
-    position: relative;
-    z-index: 10 !important;
+    z-index: 2;
 }
 
 /* Estilos para el hero cuando hay video de fondo */
 .video-background ~ .page-container .hero {
     position: relative;
-    z-index: 10 !important;
+    z-index: 2;
 }
 
 

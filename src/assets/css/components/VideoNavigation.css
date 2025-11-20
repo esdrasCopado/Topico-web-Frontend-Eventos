@@ -5,7 +5,7 @@
 /* Contenedor de los botones de navegación */
 .video-navigation {
     position: absolute;
-    top: 50%;
+    top: 50vh;
     left: 0;
     right: 0;
     transform: translateY(-50%);
@@ -13,29 +13,30 @@
     justify-content: space-between;
     align-items: center;
     pointer-events: none;
-    z-index: 5;  /* Menor que los controles de video */
+    z-index: 3;  /* Por encima del page-container que tiene z-index: 2 */
     padding: 0 30px;
     max-width: 100%;
 }
 
 /* Botones individuales */
 .video-nav-btn {
-    pointer-events: all;
+    pointer-events: all !important;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 56px;
     height: 56px;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.127);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 2px solid rgba(255, 255, 255, 0.25);
     border-radius: 50%;
     color: white;
-    cursor: pointer;
+    cursor: pointer !important;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     opacity: 0.8;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    position: relative;
 }
 
 .video-nav-btn:hover {

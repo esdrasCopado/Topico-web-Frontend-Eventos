@@ -2,18 +2,18 @@
 
 ## Controles ya implementados en tu home.js
 
-### ✅ Lo que tienes ahora:
+### Lo que tienes ahora:
 
 Los controles personalizados ya están funcionando en tu página de inicio con:
 
-- **⏮️ Atrás** - Retrocede 10 segundos
-- **▶️ Play/Pause** - Reproduce o pausa el video
-- **⏭️ Siguiente** - Avanza 10 segundos
-- **🔇 Mute/Unmute** - Silenciar o activar sonido
+- **Atrás** - Retrocede 10 segundos
+- **Play/Pause** - Reproduce o pausa el video
+- **Siguiente** - Avanza 10 segundos
+- **Mute/Unmute** - Silenciar o activar sonido
 
 ---
 
-## 🎨 Personalizar los Controles
+## Personalizar los Controles
 
 ### Cambiar la Posición
 
@@ -53,7 +53,7 @@ showSkip: true,        // false = ocultar
 
 ---
 
-## 🎯 Ejemplos de Configuración
+## Ejemplos de Configuración
 
 ### Solo Play/Pause y Mute (sin skip)
 ```javascript
@@ -188,7 +188,7 @@ this.videoControls.setPosition('bottom-center')
 
 ---
 
-## 📱 Responsive
+## Responsive
 
 Los controles se adaptan automáticamente:
 
@@ -199,7 +199,7 @@ Los controles se adaptan automáticamente:
 
 ---
 
-## ⌨️ Atajos de Teclado (Opcional)
+## Atajos de Teclado (Opcional)
 
 Si quieres agregar atajos de teclado, agrega esto en [home.js](../src/pages/home.js) afterRender():
 
@@ -247,7 +247,7 @@ afterRender() {
 
 ---
 
-## 🎬 Auto-Hide (Ocultar Automáticamente)
+## Auto-Hide (Ocultar Automáticamente)
 
 Para que los controles se oculten cuando no hay actividad:
 
@@ -312,7 +312,7 @@ afterRender() {
 
 ---
 
-## 🔧 Solución de Problemas
+## Solución de Problemas
 
 ### Los controles no aparecen
 1. Verifica que el CSS esté importado en home.js
@@ -334,21 +334,21 @@ Ajusta el `z-index` en [VideoPlayer.css](../src/assets/css/components/VideoPlaye
 
 ---
 
-## 📊 Resumen de Configuración Actual
+## Resumen de Configuración Actual
 
 Tu configuración actual en [home.js](../src/pages/home.js):
 
 ```javascript
-✅ Posición: bottom-right (abajo derecha)
-✅ Play/Pause: Activado
-✅ Mute/Unmute: Activado
-✅ Skip: Activado (10 segundos)
-✅ Estilo: Default (fondo translúcido con blur)
+Posición: bottom-right (abajo derecha)
+Play/Pause: Activado
+Mute/Unmute: Activado
+Skip: Activado (10 segundos)
+Estilo: Default (fondo translúcido con blur)
 ```
 
 ---
 
-## 🎨 Configuraciones Recomendadas
+## Configuraciones Recomendadas
 
 ### Para video de fondo decorativo:
 ```javascript

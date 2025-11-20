@@ -4,7 +4,7 @@
 
 ---
 
-## 📋 Opciones de Overlay (Oscurecer el video)
+## Opciones de Overlay (Oscurecer el video)
 
 Puedes cambiar la opacidad del overlay oscuro agregando clases al `<div class="video-background">`:
 
@@ -59,7 +59,7 @@ Puedes cambiar la opacidad del overlay oscuro agregando clases al `<div class="v
 
 ---
 
-## 🎨 Efectos Visuales Opcionales
+## Efectos Visuales Opcionales
 
 ### 1. Efecto Zoom Suave
 
@@ -176,7 +176,7 @@ Puedes combinar varios efectos:
 
 ---
 
-## 🎬 Configuraciones Recomendadas por Tipo de Video
+## Configuraciones Recomendadas por Tipo de Video
 
 ### Video Brillante/Colorido (como conciertos)
 ```html
@@ -212,7 +212,7 @@ o
 
 ---
 
-## 🎨 Personalización Avanzada del Overlay
+## Personalización Avanzada del Overlay
 
 Si ninguna opción te funciona, puedes crear tu propio overlay personalizado:
 
@@ -279,7 +279,7 @@ Luego úsala en home.js:
 
 ---
 
-## 📱 Comportamiento en Móvil
+## Comportamiento en Móvil
 
 Por defecto, el video se mantiene en móvil. Si quieres ocultarlo para mejor rendimiento:
 
@@ -305,7 +305,7 @@ Esto mostrará la imagen poster en móvil en lugar del video.
 
 ---
 
-## 🎯 Ajustar el Texto sobre el Video
+## Ajustar el Texto sobre el Video
 
 Si el texto no se lee bien, puedes modificar el text-shadow en [VideoPlayer.css](../src/assets/css/components/VideoPlayer.css), líneas 115-118:
 
@@ -358,7 +358,7 @@ En [home.js](../src/pages/home.js), línea 45:
 
 ---
 
-## 🔧 Configuración Actual vs Recomendada
+## Configuración Actual vs Recomendada
 
 ### Tu Configuración Actual:
 
@@ -400,7 +400,7 @@ En [home.js](../src/pages/home.js), línea 45:
 
 ---
 
-## 🎨 Ejemplos Completos
+## Ejemplos Completos
 
 ### Ejemplo 1: Efecto Cinematográfico Completo
 
@@ -456,7 +456,7 @@ render() {
 
 ---
 
-## 🚀 Prueba Rápida
+## Prueba Rápida
 
 Para probar diferentes opciones sin editar código:
 
@@ -480,7 +480,7 @@ document.querySelector('.video-background').className = 'video-background'
 
 ---
 
-## 📊 Comparación de Efectos
+## Comparación de Efectos
 
 | Efecto | Cuándo Usar | Impacto en Rendimiento |
 |--------|-------------|------------------------|
@@ -495,15 +495,15 @@ document.querySelector('.video-background').className = 'video-background'
 
 ---
 
-## ✅ Checklist de Personalización
+## Checklist de Personalización
 
-- [ ] Elegir overlay adecuado para tu video
-- [ ] Probar con y sin zoom effect
-- [ ] Verificar legibilidad del texto
-- [ ] Probar en móvil
-- [ ] Verificar rendimiento (FPS)
-- [ ] Ajustar text-shadow si es necesario
-- [ ] Considerar ocultar video en móvil si es pesado
+- Elegir overlay adecuado para tu video
+- Probar con y sin zoom effect
+- Verificar legibilidad del texto
+- Probar en móvil
+- Verificar rendimiento (FPS)
+- Ajustar text-shadow si es necesario
+- Considerar ocultar video en móvil si es pesado
 
 ---
 

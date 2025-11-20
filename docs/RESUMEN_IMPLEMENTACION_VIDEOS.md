@@ -39,7 +39,7 @@ Estilos completos incluyendo:
 
 ### 3. Documentación
 
-#### `docs/VIDEO_QUICK_START.md` ⭐ **EMPIEZA AQUÍ**
+#### `docs/VIDEO_QUICK_START.md` **EMPIEZA AQUÍ**
 Guía de inicio rápido con:
 - Cómo preparar videos (FFmpeg)
 - Ejemplos simples de uso
@@ -179,23 +179,23 @@ Si quieres cambiar a otra implementación:
 
 ## Mejores Prácticas Implementadas
 
-### ✅ a) Lazy Loading
+### a) Lazy Loading
 ```javascript
 lazy: true  // Solo carga cuando es visible (default)
 ```
 
-### ✅ b) Poster
+### b) Poster
 ```javascript
 poster: '/images/poster.jpg'  // Imagen mientras carga
 ```
 
-### ✅ c) Precarga Escalonada
+### c) Precarga Escalonada
 ```javascript
 // En VideoGallery
 autoPreload: true  // Carga un video a la vez automáticamente
 ```
 
-### ✅ d) Formatos Optimizados
+### d) Formatos Optimizados
 ```javascript
 sources: [
     { src: 'video.webm', type: 'video/webm' },  // Principal (60-80% más ligero)

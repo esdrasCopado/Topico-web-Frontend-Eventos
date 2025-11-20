@@ -28,10 +28,10 @@ export class HomePage {
             rotateInterval: 30000,               // Cambiar video cada 30 segundos
             autoplay: true,                      // Reproducir automáticamente
             muted: true,                         // Necesario para autoplay
-            loop: true,                          // Repetir cada video
+            loop: false,                          // Repetir cada video
             controls: false,                     // Sin controles nativos (usaremos personalizados)
             lazy: false,                         // Cargar inmediatamente
-            preload: 'metadata',                     // Estilo Netflix: precarga todo el video
+            preload: 'metadata',                     // Estilo auto Netflix: precarga todo el video, metadata mas rápido que auto
             className: 'hero-background-video'
         })
 
@@ -63,8 +63,10 @@ export class HomePage {
 
             <div class="video-background fade-bottom-strong">
                 ${this.heroVideo.render()}
-                ${this.videoNavigation.render()}
             </div>
+
+            <!-- Botones de navegación del video (fuera del video-background para evitar z-index issues) -->
+            ${this.videoNavigation.render()}
 
             <!-- Controles personalizados del video -->
             ${this.videoControls.render()}
@@ -78,7 +80,7 @@ export class HomePage {
         `
     }
 
-    afterRender() {
+    async afterRender() {
         if('connection' in navigator) {
             console.log('Información de conexión detectada:', navigator.connection)
             if(navigator.connection.type === 'cellular' || navigator.connection.effectiveType.includes('2g') || navigator.connection.effectiveType.includes('3g')) {
@@ -88,7 +90,7 @@ export class HomePage {
         }
 
         this.navbar.mount()
-        this.heroVideo.mount()  // Montar el video de fondo
+        await this.heroVideo.mount()  // Esperar a que el video cargue los videos
 
         // Asignar el videoPlayer a los controles y montarlos
         this.videoControls.videoPlayer = this.heroVideo

@@ -51,11 +51,17 @@ export class VideoNavigation {
             return
         }
 
+        console.log('VideoNavigation: VideoPlayer encontrado:', this.videoPlayer)
+        console.log('VideoNavigation: Videos disponibles:', this.videoPlayer.videos)
+        console.log('VideoNavigation: Total de videos:', this.videoPlayer.videos ? this.videoPlayer.videos.length : 0)
+
         const navElement = document.getElementById(this.id)
         if (!navElement) {
             console.error('VideoNavigation: No se encontró el elemento de navegación')
             return
         }
+
+        console.log('VideoNavigation: Elemento de navegación encontrado:', navElement)
 
         // Configurar eventos
         this._setupEventListeners(navElement)
@@ -94,16 +100,30 @@ export class VideoNavigation {
         const prevBtn = navElement.querySelector('.video-nav-prev')
         const nextBtn = navElement.querySelector('.video-nav-next')
 
+        console.log('VideoNavigation: Configurando event listeners')
+        console.log('VideoNavigation: prevBtn encontrado:', prevBtn)
+        console.log('VideoNavigation: nextBtn encontrado:', nextBtn)
+
         if (prevBtn) {
-            prevBtn.addEventListener('click', () => {
+            prevBtn.addEventListener('click', (e) => {
+                console.log('VideoNavigation: Evento click detectado en prevBtn')
+                e.preventDefault()
+                e.stopPropagation()
                 this._handlePrevious()
             })
+        } else {
+            console.error('VideoNavigation: No se encontró el botón anterior')
         }
 
         if (nextBtn) {
-            nextBtn.addEventListener('click', () => {
+            nextBtn.addEventListener('click', (e) => {
+                console.log('VideoNavigation: Evento click detectado en nextBtn')
+                e.preventDefault()
+                e.stopPropagation()
                 this._handleNext()
             })
+        } else {
+            console.error('VideoNavigation: No se encontró el botón siguiente')
         }
 
         // Soporte para teclado (flechas izquierda/derecha)
@@ -121,8 +141,13 @@ export class VideoNavigation {
      * @private
      */
     _handlePrevious() {
-        if (!this.videoPlayer) return
+        console.log('VideoNavigation: Click en botón anterior')
+        if (!this.videoPlayer) {
+            console.error('VideoNavigation: No hay videoPlayer disponible')
+            return
+        }
 
+        console.log('VideoNavigation: Llamando a previousVideo()')
         this.videoPlayer.previousVideo()
 
         if (this.onNavigate) {
@@ -135,8 +160,13 @@ export class VideoNavigation {
      * @private
      */
     _handleNext() {
-        if (!this.videoPlayer) return
+        console.log('VideoNavigation: Click en botón siguiente')
+        if (!this.videoPlayer) {
+            console.error('VideoNavigation: No hay videoPlayer disponible')
+            return
+        }
 
+        console.log('VideoNavigation: Llamando a nextVideo()')
         this.videoPlayer.nextVideo()
 
         if (this.onNavigate) {
@@ -177,8 +207,15 @@ export class VideoNavigation {
         const prevBtn = navElement.querySelector('.video-nav-prev')
         const nextBtn = navElement.querySelector('.video-nav-next')
 
+        // Verificar si los videos ya están cargados
+        if (!this.videoPlayer.videos || this.videoPlayer.videos.length === 0) {
+            // Videos aún no cargados, habilitar botones de todas formas
+            if (prevBtn) prevBtn.disabled = false
+            if (nextBtn) nextBtn.disabled = false
+            return
+        }
+
         const totalVideos = this.videoPlayer.videos.length
-        const currentIndex = this.videoPlayer.currentVideoIndex
 
         // Si solo hay un video, ocultar la navegación
         if (totalVideos <= 1) {
@@ -188,14 +225,13 @@ export class VideoNavigation {
             navElement.classList.remove('single-video')
         }
 
-        // Deshabilitar botón anterior si estamos en el primer video
+        // La navegación es circular, siempre habilitada cuando hay múltiples videos
         if (prevBtn) {
-            prevBtn.disabled = currentIndex === 0
+            prevBtn.disabled = false
         }
 
-        // Deshabilitar botón siguiente si estamos en el último video
         if (nextBtn) {
-            nextBtn.disabled = currentIndex === totalVideos - 1
+            nextBtn.disabled = false
         }
     }
 

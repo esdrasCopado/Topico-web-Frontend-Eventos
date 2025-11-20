@@ -6,12 +6,12 @@ El auto-scroll es una funcionalidad que detecta la **primera interacción** del 
 
 ## Características principales
 
-### ✅ Soporta múltiples vueltas de rueda del ratón
+### Soporta múltiples vueltas de rueda del ratón
 - **Debounce de 100ms**: Si el usuario hace múltiples scrolls rápidos, el sistema espera 100ms después del último scroll antes de ejecutar la animación
 - **No corta la transición**: Una vez iniciada la animación, se bloquea el scroll manual hasta que termine
 - **Se ejecuta solo una vez**: Después de la primera activación, el auto-scroll se desactiva permanentemente
 
-### 🎯 Eventos que disparan el auto-scroll
+### Eventos que disparan el auto-scroll
 
 1. **Wheel (rueda del ratón)**
    - Con debounce de 100ms
@@ -24,12 +24,12 @@ El auto-scroll es una funcionalidad que detecta la **primera interacción** del 
    - Teclas: `ArrowDown`, `ArrowUp`, `Space`, `PageDown`, `PageUp`
    - Ejecución inmediata
 
-### 🔒 Protección durante la animación
+### Protección durante la animación
 
 Mientras el scroll automático está activo:
-- ❌ Se bloquean eventos `wheel` y `touchmove`
-- ❌ El usuario no puede interrumpir la animación
-- ✅ La transición se completa suavemente
+- Se bloquean eventos `wheel` y `touchmove`
+- El usuario no puede interrumpir la animación
+- La transición se completa suavemente
 
 ## Configuración
 
@@ -59,8 +59,8 @@ this.cleanupAutoScroll = initAutoScroll({
 
 El auto-scroll detecta automáticamente si Lenis está disponible:
 
-- ✅ **Con Lenis**: Usa `lenis.scrollTo()` con animaciones suaves
-- ✅ **Sin Lenis**: Fallback a `scrollIntoView({ behavior: 'smooth' })`
+- **Con Lenis**: Usa `lenis.scrollTo()` con animaciones suaves
+- **Sin Lenis**: Fallback a `scrollIntoView({ behavior: 'smooth' })`
 
 ## Limpieza de recursos
 
@@ -109,17 +109,17 @@ isAnimating = false
 El sistema emite logs útiles para debugging:
 
 ```
-🎯 Auto-scroll inicializado para: #hero-container
-✨ Auto-scroll con Lenis hacia: #hero-container
-⚠️ Auto-scroll: Target "#hero-container" no encontrado (si hay error)
+Auto-scroll inicializado para: #hero-container
+Auto-scroll con Lenis hacia: #hero-container
+Auto-scroll: Target "#hero-container" no encontrado (si hay error)
 ```
 
 ## Compatibilidad
 
-- ✅ Chrome, Firefox, Safari, Edge (modernos)
-- ✅ Dispositivos móviles (iOS, Android)
-- ✅ Teclado para accesibilidad
-- ✅ Fallback para navegadores sin smooth scroll nativo
+- Chrome, Firefox, Safari, Edge (modernos)
+- Dispositivos móviles (iOS, Android)
+- Teclado para accesibilidad
+- Fallback para navegadores sin smooth scroll nativo
 
 ## Mejoras futuras posibles
 

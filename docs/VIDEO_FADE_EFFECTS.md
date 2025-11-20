@@ -1,12 +1,12 @@
 # Guía de Efectos de Difuminado para Video
 
-## 🎨 Efectos de Difuminado Disponibles
+## Efectos de Difuminado Disponibles
 
 Todos estos efectos se agregan simplemente con una clase en el `<div class="video-background">` en [home.js](../src/pages/home.js:49).
 
 ---
 
-## 🔽 Difuminado Inferior (Más Común)
+## Difuminado Inferior (Más Común)
 
 ### 1. `fade-bottom` - Difuminado Normal
 
@@ -33,7 +33,7 @@ Todos estos efectos se agregan simplemente con una clase en el `<div class="vide
 
 ---
 
-### 2. `fade-bottom-soft` - Difuminado Suave ⭐ RECOMENDADO
+### 2. `fade-bottom-soft` - Difuminado Suave RECOMENDADO
 
 **Uso:**
 ```html
@@ -83,7 +83,7 @@ Todos estos efectos se agregan simplemente con una clase en el `<div class="vide
 
 ---
 
-## 🔼 Difuminado Superior
+## Difuminado Superior
 
 ### 4. `fade-top` - Difuminado Arriba
 
@@ -108,7 +108,7 @@ Todos estos efectos se agregan simplemente con una clase en el `<div class="vide
 
 ---
 
-## 🔼🔽 Difuminado Doble
+## Difuminado Doble
 
 ### 5. `fade-top-bottom` - Arriba y Abajo
 
@@ -137,7 +137,7 @@ Todos estos efectos se agregan simplemente con una clase en el `<div class="vide
 
 ---
 
-## ⭕ Vignette (Difuminado Circular)
+## Vignette (Difuminado Circular)
 
 ### 6. `vignette` - Vignette Clásico
 
@@ -164,7 +164,7 @@ Todos estos efectos se agregan simplemente con una clase en el `<div class="vide
 
 ---
 
-### 7. `vignette-bottom` - Vignette + Fade Inferior ⭐ MUY RECOMENDADO
+### 7. `vignette-bottom` - Vignette + Fade Inferior MUY RECOMENDADO
 
 **Uso:**
 ```html
@@ -189,7 +189,7 @@ Todos estos efectos se agregan simplemente con una clase en el `<div class="vide
 
 ---
 
-## ↔️ Otros Efectos
+## Otros Efectos
 
 ### 8. `fade-sides` - Difuminado Lateral
 
@@ -231,23 +231,23 @@ Todos estos efectos se agregan simplemente con una clase en el `<div class="vide
 
 ---
 
-## 🎯 Comparación Rápida
+## Comparación Rápida
 
 | Efecto | Área Afectada | Intensidad | Uso Recomendado |
 |--------|---------------|------------|-----------------|
 | `fade-bottom` | Inferior 40% | Media (80%) | General |
-| `fade-bottom-soft` ⭐ | Inferior 50% | Suave (40-90%) | **Profesional** |
+| `fade-bottom-soft` | Inferior 50% | Suave (40-90%) | **Profesional** |
 | `fade-bottom-strong` | Inferior 60% | Fuerte (100%) | Alto contraste |
 | `fade-top` | Superior 30% | Media (70%) | Proteger header |
 | `fade-top-bottom` | Ambos extremos | Variable | Contenido central |
 | `vignette` | Bordes circulares | Media (60%) | Cinematográfico |
-| `vignette-bottom` ⭐ | Bordes + inferior | Fuerte | **Premium** |
+| `vignette-bottom` | Bordes + inferior | Fuerte | **Premium** |
 | `fade-sides` | Laterales | Media (70%) | Formato vertical |
 | `letterbox` | Arriba + abajo | Total (100%) | Cine clásico |
 
 ---
 
-## 💡 Cómo Implementar
+## Cómo Implementar
 
 ### En tu [home.js](../src/pages/home.js), línea 49:
 
@@ -267,7 +267,7 @@ Todos estos efectos se agregan simplemente con una clase en el `<div class="vide
 
 ---
 
-## 🎨 Combinaciones Recomendadas
+## Combinaciones Recomendadas
 
 ### Para Video de Coldplay (Brillante/Colorido):
 
@@ -305,7 +305,7 @@ Todos estos efectos se agregan simplemente con una clase en el `<div class="vide
 
 ---
 
-## 🔧 Personalización Avanzada
+## Personalización Avanzada
 
 Si quieres ajustar los valores, edita [VideoPlayer.css](../src/assets/css/components/VideoPlayer.css):
 
@@ -347,7 +347,7 @@ rgba(0, 25, 10, 0.8)
 
 ---
 
-## 🚀 Prueba Rápida en el Navegador
+## Prueba Rápida en el Navegador
 
 Sin editar código, prueba en la consola del navegador (F12):
 
@@ -367,7 +367,7 @@ document.querySelector('.video-background').className = 'video-background'
 
 ---
 
-## ✅ Recomendación Final
+## Recomendación Final
 
 Para tu video de Coldplay, te recomiendo empezar con:
 
@@ -376,10 +376,10 @@ Para tu video de Coldplay, te recomiendo empezar con:
 ```
 
 Esto da un look **profesional, moderno y elegante** con:
-- ✅ Difuminado suave en la parte inferior
-- ✅ Overlay oscuro general para contraste
-- ✅ Filtro cinematográfico para colores premium
-- ✅ Legibilidad perfecta del texto
+- Difuminado suave en la parte inferior
+- Overlay oscuro general para contraste
+- Filtro cinematográfico para colores premium
+- Legibilidad perfecta del texto
 
 ---
 

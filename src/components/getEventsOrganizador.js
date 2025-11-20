@@ -1,3 +1,4 @@
+import '../assets/css/components/getEventsOrganizador.css'
 import { getUserInfo } from '../services/auth.js'
 import { get } from '../utils/api.js'
 import { Icons } from '../utils/icons.js'
