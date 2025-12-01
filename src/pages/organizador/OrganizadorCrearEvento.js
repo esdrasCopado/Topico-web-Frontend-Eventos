@@ -167,9 +167,9 @@ export class OrganizadorCrearEventoPage {
             placeholder: 'Arrastra la imagen del evento aquí o haz clic para seleccionar',
             onFileSelect: (file) => {
                 if (file) {
-                    console.log('✅ Imagen seleccionada:', file.name, `(${(file.size / 1024 / 1024).toFixed(2)} MB)`)
+                    console.log(' Imagen seleccionada:', file.name, `(${(file.size / 1024 / 1024).toFixed(2)} MB)`)
                 } else {
-                    console.log('🗑️ Imagen eliminada')
+                    console.log(' Imagen eliminada')
                 }
             },
             onError: (error) => {

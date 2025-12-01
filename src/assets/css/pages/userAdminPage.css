@@ -1,0 +1,487 @@
+/* ============================================
+   User Admin Page - Administración de Usuarios
+   Namespace: uap (user-admin-page)
+   Patrón: BEM (Block Element Modifier)
+   ============================================ */
+
+/* ===== VARIABLES CSS ===== */
+:root {
+    /* Colores Light Mode */
+    --uap-bg-primary: #ffffff;
+    --uap-bg-secondary: #f8f9fa;
+    --uap-bg-hover: #f1f3f5;
+
+    --uap-text-primary: #212529;
+    --uap-text-secondary: #6c757d;
+    --uap-text-muted: #adb5bd;
+
+    --uap-border-color: #dee2e6;
+    --uap-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --uap-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --uap-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+    /* Status colors */
+    --uap-status-active: #28a745;
+    --uap-status-inactive: #dc3545;
+    --uap-status-active-bg: #d4edda;
+    --uap-status-inactive-bg: #f8d7da;
+
+    /* Action buttons */
+    --uap-btn-edit: #007bff;
+    --uap-btn-edit-hover: #0056b3;
+    --uap-btn-delete: #dc3545;
+    --uap-btn-delete-hover: #c82333;
+
+    /* Loading/Error states */
+    --uap-loading-bg: rgba(255, 255, 255, 0.9);
+    --uap-error-bg: #f8d7da;
+    --uap-error-border: #f5c6cb;
+    --uap-error-text: #721c24;
+}
+
+/* Dark Mode Variables */
+[data-theme="dark"],
+.dark-mode {
+    --uap-bg-primary: #1a1d23;
+    --uap-bg-secondary: #22262e;
+    --uap-bg-hover: #2a2f38;
+
+    --uap-text-primary: #e9ecef;
+    --uap-text-secondary: #adb5bd;
+    --uap-text-muted: #6c757d;
+
+    --uap-border-color: #343a40;
+    --uap-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --uap-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+    --uap-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+
+    /* Status colors (más suaves en dark mode) */
+    --uap-status-active: #4ade80;
+    --uap-status-inactive: #f87171;
+    --uap-status-active-bg: rgba(74, 222, 128, 0.15);
+    --uap-status-inactive-bg: rgba(248, 113, 113, 0.15);
+
+    /* Action buttons */
+    --uap-btn-edit: #3b82f6;
+    --uap-btn-edit-hover: #2563eb;
+    --uap-btn-delete: #ef4444;
+    --uap-btn-delete-hover: #dc2626;
+
+    /* Loading/Error states */
+    --uap-loading-bg: rgba(26, 29, 35, 0.95);
+    --uap-error-bg: rgba(220, 53, 69, 0.15);
+    --uap-error-border: rgba(220, 53, 69, 0.3);
+    --uap-error-text: #fca5a5;
+}
+
+/* ===== CONTAINER PRINCIPAL ===== */
+.uap__container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    min-height: calc(100vh - 80px); /* Ajustar según altura del navbar */
+    background: var(--uap-bg-primary);
+    color: var(--uap-text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ===== HEADER ===== */
+.uap__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--uap-border-color);
+}
+
+.uap__title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--uap-text-primary);
+    margin: 0;
+}
+
+/* ===== CONTENT AREA ===== */
+.uap__content {
+    background: var(--uap-bg-secondary);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: var(--uap-shadow-sm);
+    min-height: 400px;
+    transition: background-color 0.3s ease;
+}
+
+/* ===== LOADING STATE ===== */
+.uap__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    background: var(--uap-loading-bg);
+    border-radius: 8px;
+}
+
+.uap__spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid var(--uap-border-color);
+    border-top-color: #007bff;
+    border-radius: 50%;
+    animation: uap-spin 0.8s linear infinite;
+}
+
+@keyframes uap-spin {
+    to { transform: rotate(360deg); }
+}
+
+.uap__loading-text {
+    margin-top: 1rem;
+    color: var(--uap-text-secondary);
+    font-size: 1rem;
+}
+
+/* ===== ERROR STATE ===== */
+.uap__error {
+    background: var(--uap-error-bg);
+    border: 1px solid var(--uap-error-border);
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+}
+
+.uap__error-message {
+    color: var(--uap-error-text);
+    font-size: 1.125rem;
+    margin-bottom: 1rem;
+}
+
+/* ===== EMPTY STATE ===== */
+.uap__empty {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--uap-text-muted);
+}
+
+.uap__empty-text {
+    font-size: 1.25rem;
+    margin: 0;
+}
+
+/* ===== TABLE ===== */
+.uap__table-container {
+    overflow-x: auto;
+    border-radius: 8px;
+    background: var(--uap-bg-primary);
+}
+
+.uap__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.uap__table-head {
+    background: var(--uap-bg-secondary);
+    border-bottom: 2px solid var(--uap-border-color);
+}
+
+.uap__table-head th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: var(--uap-text-primary);
+    white-space: nowrap;
+}
+
+.uap__table-body {
+    background: var(--uap-bg-primary);
+}
+
+.uap__table-row {
+    border-bottom: 1px solid var(--uap-border-color);
+    transition: background-color 0.2s ease;
+}
+
+.uap__table-row:hover {
+    background: var(--uap-bg-hover);
+}
+
+.uap__cell {
+    padding: 1rem;
+    color: var(--uap-text-primary);
+    vertical-align: middle;
+}
+
+.uap__cell:first-child {
+    font-weight: 600;
+    color: var(--uap-text-secondary);
+}
+
+/* Cell con acciones */
+.uap__cell--actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+/* ===== ROLE SELECT ===== */
+.uap__role-select {
+    padding: 0.5rem 2rem 0.5rem 0.75rem;
+    background: var(--uap-bg-secondary);
+    border: 1px solid var(--uap-border-color);
+    border-radius: 6px;
+    color: var(--uap-text-primary);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236c757d' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+}
+
+.uap__role-select:hover {
+    border-color: #007bff;
+}
+
+.uap__role-select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+/* Dark mode select arrow */
+[data-theme="dark"] .uap__role-select,
+.dark-mode .uap__role-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23adb5bd' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+}
+
+/* ===== STATUS BADGE ===== */
+.uap__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.uap__status::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.uap__status--active {
+    background: var(--uap-status-active-bg);
+    color: var(--uap-status-active);
+    border: 1px solid var(--uap-status-active);
+}
+
+.uap__status--active::before {
+    background: var(--uap-status-active);
+}
+
+.uap__status--inactive {
+    background: var(--uap-status-inactive-bg);
+    color: var(--uap-status-inactive);
+    border: 1px solid var(--uap-status-inactive);
+}
+
+.uap__status--inactive::before {
+    background: var(--uap-status-inactive);
+}
+
+/* ===== BUTTONS ===== */
+.uap__btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.uap__btn:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--uap-shadow-md);
+}
+
+.uap__btn:active {
+    transform: translateY(0);
+}
+
+.uap__btn--edit {
+    background: var(--uap-btn-edit);
+    color: white;
+}
+
+.uap__btn--edit:hover {
+    background: var(--uap-btn-edit-hover);
+}
+
+.uap__btn--delete {
+    background: var(--uap-btn-delete);
+    color: white;
+}
+
+.uap__btn--delete:hover {
+    background: var(--uap-btn-delete-hover);
+}
+
+/* ===== RESPONSIVE ===== */
+
+/* Tablet */
+@media (max-width: 1024px) {
+    .uap__container {
+        padding: 1.5rem;
+    }
+
+    .uap__header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .uap__table {
+        font-size: 0.875rem;
+    }
+
+    .uap__cell,
+    .uap__table-head th {
+        padding: 0.75rem;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .uap__container {
+        padding: 1rem;
+    }
+
+    .uap__title {
+        font-size: 1.5rem;
+    }
+
+    .uap__content {
+        padding: 1rem;
+    }
+
+    /* Hacer la tabla scrollable horizontalmente */
+    .uap__table-container {
+        margin: 0 -1rem;
+        border-radius: 0;
+    }
+
+    .uap__table {
+        font-size: 0.8rem;
+    }
+
+    .uap__cell,
+    .uap__table-head th {
+        padding: 0.5rem;
+        white-space: nowrap;
+    }
+
+    /* Reducir tamaño de badges */
+    .uap__status {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+    }
+
+    .uap__status::before {
+        width: 6px;
+        height: 6px;
+    }
+
+    /* Botones más pequeños */
+    .uap__btn {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.75rem;
+    }
+
+    /* Acciones en columna en móviles muy pequeños */
+    .uap__cell--actions {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .uap__cell--actions .uap__btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+    .uap__title {
+        font-size: 1.25rem;
+    }
+
+    /* Ocultar algunas columnas en móviles pequeños */
+    .uap__table-head th:nth-child(5),
+    .uap__cell:nth-child(5) {
+        display: none; /* Ocultar "Fecha Registro" */
+    }
+}
+
+/* ===== ANIMACIONES ===== */
+.uap__table-row {
+    animation: uap-fadeIn 0.3s ease-in-out;
+}
+
+@keyframes uap-fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== ACCESIBILIDAD ===== */
+.uap__btn:focus,
+.uap__role-select:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* Reduce motion para usuarios que lo prefieran */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+    .uap__header button,
+    .uap__btn {
+        display: none;
+    }
+
+    .uap__container {
+        padding: 0;
+    }
+
+    .uap__table-row:hover {
+        background: transparent;
+    }
+}

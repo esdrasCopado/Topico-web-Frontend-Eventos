@@ -6,7 +6,7 @@ export default defineConfig({
     strictPort: false,
     // Deshabilitar CSP estricto en desarrollo
     headers: {
-      'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http://localhost:*; font-src 'self' data:; connect-src 'self' http://localhost:* ws://localhost:*;"
+      'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http://localhost:*; media-src 'self' http://localhost:*; font-src 'self' data:; connect-src 'self' http://localhost:* ws://localhost:*;"
     }
   },
   build: {

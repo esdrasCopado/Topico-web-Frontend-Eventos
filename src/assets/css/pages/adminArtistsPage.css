@@ -1,0 +1,697 @@
+/* ============================================
+   Admin Artists Page - Administración de Artistas
+   Namespace: aarp (admin-artists-page)
+   Patron: BEM (Block Element Modifier)
+   ============================================ */
+
+/* ===== VARIABLES CSS ===== */
+:root {
+    /* Colores Light Mode */
+    --aarp-bg-primary: #ffffff;
+    --aarp-bg-secondary: #f8f9fa;
+    --aarp-bg-hover: #f1f3f5;
+
+    --aarp-text-primary: #212529;
+    --aarp-text-secondary: #6c757d;
+    --aarp-text-muted: #adb5bd;
+
+    --aarp-border-color: #dee2e6;
+    --aarp-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --aarp-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --aarp-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+    /* Action buttons */
+    --aarp-btn-edit: #6c757d;
+    --aarp-btn-edit-hover: #5a6268;
+    --aarp-btn-delete: #495057;
+    --aarp-btn-delete-hover: #343a40;
+
+    /* Loading/Error states */
+    --aarp-loading-bg: rgba(255, 255, 255, 0.9);
+    --aarp-error-bg: #f8d7da;
+    --aarp-error-border: #f5c6cb;
+    --aarp-error-text: #721c24;
+}
+
+/* Dark Mode Variables */
+[data-theme="dark"],
+.dark-mode {
+    --aarp-bg-primary: #1a1d23;
+    --aarp-bg-secondary: #22262e;
+    --aarp-bg-hover: #2a2f38;
+
+    --aarp-text-primary: #e9ecef;
+    --aarp-text-secondary: #adb5bd;
+    --aarp-text-muted: #6c757d;
+
+    --aarp-border-color: #343a40;
+    --aarp-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --aarp-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+    --aarp-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+
+    /* Action buttons */
+    --aarp-btn-edit: #4b5563;
+    --aarp-btn-edit-hover: #374151;
+    --aarp-btn-delete: #374151;
+    --aarp-btn-delete-hover: #1f2937;
+
+    /* Loading/Error states */
+    --aarp-loading-bg: rgba(26, 29, 35, 0.95);
+    --aarp-error-bg: rgba(220, 53, 69, 0.15);
+    --aarp-error-border: rgba(220, 53, 69, 0.3);
+    --aarp-error-text: #fca5a5;
+}
+
+/* ===== CONTAINER PRINCIPAL ===== */
+.aarp__container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    min-height: calc(100vh - 80px);
+    background: var(--aarp-bg-primary);
+    color: var(--aarp-text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ===== HEADER ===== */
+.aarp__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--aarp-border-color);
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.aarp__title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--aarp-text-primary);
+    margin: 0;
+}
+
+.aarp__header-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+/* ===== CONTENT AREA ===== */
+.aarp__content {
+    background: var(--aarp-bg-secondary);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: var(--aarp-shadow-sm);
+    min-height: 400px;
+    transition: background-color 0.3s ease;
+}
+
+/* ===== LOADING STATE ===== */
+.aarp__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    background: var(--aarp-loading-bg);
+    border-radius: 8px;
+}
+
+.aarp__spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid var(--aarp-border-color);
+    border-top-color: #007bff;
+    border-radius: 50%;
+    animation: aarp-spin 0.8s linear infinite;
+}
+
+@keyframes aarp-spin {
+    to { transform: rotate(360deg); }
+}
+
+.aarp__loading-text {
+    margin-top: 1rem;
+    color: var(--aarp-text-secondary);
+    font-size: 1rem;
+}
+
+/* ===== ERROR STATE ===== */
+.aarp__error {
+    background: var(--aarp-error-bg);
+    border: 1px solid var(--aarp-error-border);
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+}
+
+.aarp__error-message {
+    color: var(--aarp-error-text);
+    font-size: 1.125rem;
+    margin-bottom: 1rem;
+}
+
+/* ===== EMPTY STATE ===== */
+.aarp__empty {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--aarp-text-muted);
+}
+
+.aarp__empty-text {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+/* ===== LISTA DE ARTISTAS ===== */
+.aarp__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem 0;
+}
+
+/* ===== ITEM DE ARTISTA (LISTA) ===== */
+.aarp__card {
+    background: var(--aarp-bg-primary);
+    border: 1px solid var(--aarp-border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: var(--aarp-shadow-sm);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1rem;
+}
+
+.aarp__card:hover {
+    box-shadow: var(--aarp-shadow-md);
+    background: var(--aarp-bg-hover);
+}
+
+.aarp__card-image-container {
+    width: 80px;
+    height: 80px;
+    min-width: 80px;
+    overflow: hidden;
+    background: var(--aarp-bg-hover);
+    border-radius: 6px;
+    position: relative;
+}
+
+.aarp__card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.aarp__card:hover .aarp__card-image {
+    transform: scale(1.1);
+}
+
+.aarp__card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.aarp__card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--aarp-text-primary);
+    margin: 0;
+    line-height: 1.3;
+}
+
+.aarp__card-info {
+    font-size: 0.875rem;
+    color: var(--aarp-text-secondary);
+    margin: 0;
+    line-height: 1.4;
+    display: inline;
+}
+
+.aarp__card-info strong {
+    color: var(--aarp-text-primary);
+    font-weight: 600;
+}
+
+.aarp__card-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-left: auto;
+}
+
+/* ===== BUTTONS ===== */
+.aarp__btn--edit,
+.aarp__btn--delete {
+    padding: 0.625rem 1.125rem;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.aarp__btn--edit::before,
+.aarp__btn--delete::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+    transition: left 0.5s ease;
+}
+
+.aarp__btn--edit:hover::before,
+.aarp__btn--delete:hover::before {
+    left: 100%;
+}
+
+.aarp__btn--edit:hover,
+.aarp__btn--delete:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.aarp__btn--edit:active,
+.aarp__btn--delete:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.aarp__btn--edit {
+    background: var(--aarp-btn-edit);
+    color: white;
+    border-color: var(--aarp-btn-edit);
+}
+
+.aarp__btn--edit:hover {
+    background: var(--aarp-btn-edit-hover);
+    border-color: var(--aarp-btn-edit-hover);
+}
+
+.aarp__btn--delete {
+    background: transparent;
+    color: var(--aarp-text-primary);
+    border-color: var(--aarp-border-color);
+}
+
+.aarp__btn--delete:hover {
+    background: var(--aarp-btn-delete);
+    color: white;
+    border-color: var(--aarp-btn-delete);
+}
+
+/* Icon styling inside buttons */
+.aarp__btn--edit svg,
+.aarp__btn--delete svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    transition: transform 0.3s ease;
+}
+
+.aarp__btn--edit:hover svg,
+.aarp__btn--delete:hover svg {
+    transform: scale(1.1);
+}
+
+/* ===== MODAL OVERLAY ===== */
+.aarp__modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+    animation: aarp-fadeIn 0.2s ease-out;
+}
+
+/* ===== FORMULARIO MODAL ===== */
+.aarp__form-container {
+    max-width: 900px;
+    width: 100%;
+    max-height: 90vh;
+    margin: 0 auto;
+    background: var(--aarp-bg-primary);
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    animation: aarp-slideUp 0.3s ease-out;
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes aarp-slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.aarp__form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-bottom: 2px solid var(--aarp-border-color);
+    background: var(--aarp-bg-secondary);
+}
+
+.aarp__form-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--aarp-text-primary);
+    margin: 0;
+}
+
+.aarp__form-close {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--aarp-text-secondary);
+    cursor: pointer;
+    padding: 0.5rem;
+    line-height: 1;
+    transition: all 0.2s ease;
+    border-radius: 6px;
+}
+
+.aarp__form-close:hover {
+    background: var(--aarp-bg-hover);
+    color: var(--aarp-text-primary);
+}
+
+.aarp__form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: 2rem;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.aarp__form-left {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.aarp__form-right {
+    display: flex;
+    flex-direction: column;
+}
+
+.aarp__form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.aarp__label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--aarp-text-primary);
+}
+
+.aarp__input,
+.aarp__select {
+    padding: 0.875rem 1rem;
+    border: 2px solid var(--aarp-border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: var(--aarp-bg-secondary);
+    color: var(--aarp-text-primary);
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.aarp__input:focus,
+.aarp__select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.1);
+    background: var(--aarp-bg-primary);
+}
+
+.aarp__input:hover,
+.aarp__select:hover {
+    border-color: #007bff;
+}
+
+/* ===== ADDITIONAL FORM FIELDS (RIGHT SIDE) ===== */
+/* El lado derecho contiene campos adicionales del artista */
+
+.aarp__form-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.aarp__form-actions button {
+    flex: 1;
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
+    font-weight: 400;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.aarp__form-actions .btn-primary {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.aarp__form-actions .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+}
+
+.aarp__form-actions .btn-primary:active {
+    transform: translateY(0);
+}
+
+.aarp__form-actions .btn-secondary {
+    background: var(--aarp-bg-primary);
+    color: var(--aarp-text-secondary);
+    border: 2px solid var(--aarp-border-color);
+}
+
+.aarp__form-actions .btn-secondary:hover {
+    background: var(--aarp-bg-hover);
+    color: var(--aarp-text-primary);
+    border-color: var(--aarp-text-secondary);
+}
+
+/* ===== RESPONSIVE ===== */
+
+/* Tablet */
+@media (max-width: 1024px) {
+    .aarp__container {
+        padding: 1.5rem;
+    }
+
+    .aarp__header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .aarp__header-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .aarp__form-container {
+        padding: 1.5rem;
+    }
+
+    .aarp__input-file {
+        min-height: 180px;
+        padding: 2.5rem 1rem;
+    }
+
+    .aarp__input-file::before {
+        font-size: 2.5rem;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .aarp__container {
+        padding: 1rem;
+    }
+
+    .aarp__title {
+        font-size: 1.5rem;
+    }
+
+    .aarp__content {
+        padding: 1rem;
+    }
+
+    .aarp__card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .aarp__card-image-container {
+        width: 100%;
+        height: 150px;
+    }
+
+    .aarp__card-actions {
+        width: 100%;
+        margin-left: 0;
+        justify-content: flex-end;
+    }
+
+    .aarp__btn--edit,
+    .aarp__btn--delete {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
+    }
+
+    .aarp__input-file {
+        min-height: 150px;
+        padding: 2rem 1rem;
+    }
+
+    .aarp__input-file::before {
+        font-size: 2rem;
+    }
+
+    .aarp__input-file::after {
+        font-size: 0.9rem;
+    }
+
+    .aarp__form-container {
+        padding: 1rem;
+    }
+
+    .aarp__form-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .aarp__form-actions {
+        flex-direction: column;
+    }
+
+    .aarp__header-actions {
+        flex-wrap: wrap;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+    .aarp__title {
+        font-size: 1.25rem;
+    }
+
+    .aarp__header-actions button {
+        font-size: 0.85rem;
+        padding: 0.5rem 0.75rem;
+    }
+
+    .aarp__card-actions {
+        flex-direction: column;
+    }
+
+    .aarp__btn--edit,
+    .aarp__btn--delete {
+        width: 100%;
+    }
+}
+
+/* ===== ANIMACIONES ===== */
+.aarp__card {
+    animation: aarp-fadeIn 0.3s ease-in-out;
+}
+
+@keyframes aarp-fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== ACCESIBILIDAD ===== */
+.aarp__btn--edit:focus,
+.aarp__btn--delete:focus,
+.aarp__input:focus,
+.aarp__select:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* Reduce motion para usuarios que lo prefieran */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+    .aarp__header-actions,
+    .aarp__card-actions,
+    .aarp__btn--edit,
+    .aarp__btn--delete {
+        display: none;
+    }
+
+    .aarp__container {
+        padding: 0;
+    }
+
+    .aarp__grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .aarp__card:hover {
+        transform: none;
+        box-shadow: var(--aarp-shadow-sm);
+    }
+}

@@ -23,17 +23,17 @@
 
 /* Posiciones de los controles */
 .video-controls.controls-position-bottom-right {
-    bottom: 40px;
+    bottom: 10px;
     right: 40px;
 }
 
 .video-controls.controls-position-bottom-left {
-    bottom: 40px;
+    bottom: 10px;
     left: 40px;
 }
 
 .video-controls.controls-position-bottom-center {
-    bottom: 40px;
+    bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
 }

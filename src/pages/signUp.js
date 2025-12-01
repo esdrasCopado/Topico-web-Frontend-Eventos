@@ -46,7 +46,6 @@ export class SignUpPage {
      * Registrar nuevo usuario
      */
     async fetchUserRegistration(userData) {
-        console.log('📝 Registrando usuario:', userData)
 
         const { data, error, status } = await post('/usuarios', {
             nombre: userData.nombre,
@@ -58,8 +57,8 @@ export class SignUpPage {
         })
 
         if (error) {
-            console.error('❌ Error en fetchUserRegistration:', error)
-            console.error('🔢 Status:', status)
+            console.error(' Error en fetchUserRegistration:', error)
+            console.error(' Status:', status)
 
             // Mensaje específico según el código de error
             let errorMessage = 'Error al registrar usuario'
@@ -200,7 +199,7 @@ export class SignUpPage {
                 if (!result.disponible) {
                     messageContainer.innerHTML = `
                         <div style="padding: 12px; background: #fff8c5; color: #9a6700; border-radius: 4px; margin-bottom: 16px;">
-                            ⚠️ Este email ya está registrado
+                             Este email ya está registrado
                         </div>
                     `
                 } else {
@@ -282,7 +281,7 @@ export class SignUpPage {
             if (result.success) {
                 messageContainer.innerHTML = `
                     <div style="padding: 12px; background: #d4edda; color: #155724; border-radius: 4px; margin-bottom: 16px;">
-                        ✅ ¡Registro exitoso! Redirigiendo al login...
+                         ¡Registro exitoso! Redirigiendo al login...
                     </div>
                 `
 

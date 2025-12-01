@@ -1,0 +1,347 @@
+/* ============================================
+   Configuration Page - Pagina de Configuración
+   Namespace: cp (configuration-page)
+   Patron: BEM (Block Element Modifier)
+   ============================================ */
+
+/* ===== VARIABLES CSS ===== */
+:root {
+    /* Colores Light Mode */
+    --cp-bg-primary: #ffffff;
+    --cp-bg-secondary: #f8f9fa;
+    --cp-bg-hover: #f1f3f5;
+    --cp-bg-card: #ffffff;
+
+    --cp-text-primary: #212529;
+    --cp-text-secondary: #6c757d;
+    --cp-text-muted: #adb5bd;
+
+    --cp-border-color: #dee2e6;
+    --cp-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --cp-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --cp-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+    /* Buttons */
+    --cp-btn-primary: #007bff;
+    --cp-btn-primary-hover: #0056b3;
+    --cp-btn-secondary: #6c757d;
+    --cp-btn-secondary-hover: #5a6268;
+}
+
+/* Dark Mode Variables */
+[data-theme="dark"],
+.dark-mode {
+    --cp-bg-primary: #060607;
+    --cp-bg-secondary: #22262e;
+    --cp-bg-hover: #2a2f38;
+    --cp-bg-card: #22262e;
+
+    --cp-text-primary: #e9ecef;
+    --cp-text-secondary: #adb5bd;
+    --cp-text-muted: #6c757d;
+
+    --cp-border-color: #343a40;
+    --cp-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --cp-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+    --cp-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+
+    --cp-btn-primary: #3b82f6;
+    --cp-btn-primary-hover: #2563eb;
+    --cp-btn-secondary: #4b5563;
+    --cp-btn-secondary-hover: #374151;
+}
+
+/* ===== CONTAINER PRINCIPAL ===== */
+.page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    min-height: calc(100vh - 80px);
+    background: var(--cp-bg-primary);
+    color: var(--cp-text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ===== HEADER ===== */
+.configuration-header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid var(--cp-border-color);
+}
+
+.configuration-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--cp-text-primary);
+    margin: 0 0 0.5rem 0;
+    line-height: 1.2;
+}
+
+.configuration-header p {
+    font-size: 1rem;
+    color: var(--cp-text-secondary);
+    margin: 0;
+}
+
+/* ===== CONTENT ===== */
+.configuration-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* ===== CONFIG SECTION ===== */
+.config-section {
+    background: var(--cp-bg-card);
+    border: 1px solid var(--cp-border-color);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: var(--cp-shadow-sm);
+    transition: all 0.3s ease;
+}
+
+.config-section:hover {
+    box-shadow: var(--cp-shadow-md);
+    border-color: var(--cp-btn-primary);
+}
+
+.config-section h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--cp-text-primary);
+    margin: 0 0 0.5rem 0;
+    line-height: 1.3;
+}
+
+.config-description {
+    font-size: 0.95rem;
+    color: var(--cp-text-secondary);
+    margin: 0 0 1.5rem 0;
+    line-height: 1.5;
+}
+
+/* ===== THEME TOGGLE BUTTON ===== */
+.theme-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(135deg, var(--cp-btn-primary) 0%, var(--cp-btn-primary-hover) 100%);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-toggle-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.theme-toggle-btn:hover::before {
+    left: 100%;
+}
+
+.theme-toggle-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+}
+
+.theme-toggle-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+}
+
+/* Dark mode specific button styling */
+[data-theme="dark"] .theme-toggle-btn,
+.dark-mode .theme-toggle-btn {
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+[data-theme="dark"] .theme-toggle-btn:hover,
+.dark-mode .theme-toggle-btn:hover {
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+/* ===== CHANGE PASSWORD BUTTON ===== */
+.change-password-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    background: var(--cp-btn-secondary);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.change-password-btn:hover {
+    background: var(--cp-btn-secondary-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--cp-shadow-md);
+}
+
+.change-password-btn:active {
+    transform: translateY(0);
+}
+
+/* ===== FORM ELEMENTS ===== */
+.config-section label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1rem;
+    color: var(--cp-text-primary);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+}
+
+.config-section label:hover {
+    background: var(--cp-bg-hover);
+}
+
+.config-section input[type="checkbox"] {
+    width: 1.25rem;
+    height: 1.25rem;
+    cursor: pointer;
+    accent-color: var(--cp-btn-primary);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.config-section {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.config-section:nth-child(1) {
+    animation-delay: 0.05s;
+}
+
+.config-section:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.config-section:nth-child(3) {
+    animation-delay: 0.15s;
+}
+
+/* ===== RESPONSIVE ===== */
+
+/* Tablet */
+@media (max-width: 768px) {
+    .page-container {
+        padding: 1.5rem;
+    }
+
+    .configuration-header h1 {
+        font-size: 1.75rem;
+    }
+
+    .config-section {
+        padding: 1.5rem;
+    }
+
+    .config-section h2 {
+        font-size: 1.25rem;
+    }
+
+    .theme-toggle-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .change-password-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .page-container {
+        padding: 1rem;
+    }
+
+    .configuration-header {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+    }
+
+    .configuration-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .configuration-header p {
+        font-size: 0.9rem;
+    }
+
+    .config-section {
+        padding: 1rem;
+    }
+
+    .config-section h2 {
+        font-size: 1.1rem;
+    }
+
+    .config-description {
+        font-size: 0.875rem;
+    }
+
+    .theme-toggle-btn,
+    .change-password-btn {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.95rem;
+    }
+}
+
+/* ===== ACCESSIBILITY ===== */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus states for accessibility */
+.theme-toggle-btn:focus-visible,
+.change-password-btn:focus-visible {
+    outline: 3px solid var(--cp-btn-primary);
+    outline-offset: 2px;
+}
+
+input[type="checkbox"]:focus-visible {
+    outline: 2px solid var(--cp-btn-primary);
+    outline-offset: 2px;
+}

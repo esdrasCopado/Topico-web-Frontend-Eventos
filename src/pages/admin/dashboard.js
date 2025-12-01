@@ -52,6 +52,18 @@ export class AdminDashboardPage {
                                 <h3>Ver Reportes</h3>
                                 <p>Estadísticas y análisis detallados</p>
                             </a>
+                            <a href="/admin/artistas" data-link class="action-card">
+                                <h3>Administrar Artistas</h3>
+                                <p>Gestionar la colección de artistas</p>
+                            </a>
+                            <a href="/admin/albums" data-link class="action-card">
+                                <h3>Administrar Álbumes</h3>
+                                <p>Gestionar la colección de álbumes</p>
+                            </a>
+                            <a href="/admin/songs" data-link class="action-card">
+                                <h3>Administrar Canciones</h3>
+                                <p>Gestionar la colección de canciones</p>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -61,6 +73,5 @@ export class AdminDashboardPage {
 
     afterRender() {
         this.navbar.afterRender()
-        console.log('✅ Panel de Administración cargado')
     }
 }

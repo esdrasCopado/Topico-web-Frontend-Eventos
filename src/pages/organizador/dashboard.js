@@ -54,6 +54,10 @@ export class OrganizadorDashboardPage {
                                 <h3>Estadísticas</h3>
                                 <p>Análisis de rendimiento</p>
                             </a>
+                            <a href="/admin/artistas" data-link class="action-card">
+                                <h3>Gestionar Artistas</h3>
+                                <p>Ver, editar y administrar artistas</p>
+                            </a>
                         </div>
                     </div>
 

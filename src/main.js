@@ -8,6 +8,10 @@ import './assets/css/components/UserDropdown.css'
 import './assets/css/components/ImageDrop.css'
 import './assets/css/pages/dashboard.css'
 import './assets/css/pages/eventDetail.css'
+import './assets/css/pages/userAdminPage.css'
+import './assets/css/pages/adminAlbumPage.css'
+import './assets/css/pages/adminArtistsPage.css'
+import './assets/css/pages/ConfigurationPage.css'
 // Nota: Tikets.css se carga solo en createTickets.js
 
 // Importar Router
@@ -15,6 +19,9 @@ import Router from './router.js'
 
 // Importar Lenis para smooth scroll
 import { initSmoothScroll } from './utils/smoothScroll.js'
+
+// Importar sistema de temas
+import { initTheme, toggleTheme } from './utils/theme.js'
 
 // Importar servicios de autenticación
 import { authGuard, guestGuard, ROLES } from './services/auth.js'
@@ -27,6 +34,7 @@ import { NotFoundPage } from './pages/notFound.js'
 import { UnauthorizedPage } from './pages/unauthorized.js'
 import { EventDetailPage } from './pages/eventDetail.js'
 import { CartPurchasePage } from './pages/cartPage.js'
+import { ConfigurationPage } from './pages/ConfigurationPage.js'
 
 // Importar páginas protegidas por rol
 import { AdminDashboardPage } from './pages/admin/dashboard.js'
@@ -34,6 +42,15 @@ import { OrganizadorDashboardPage } from './pages/organizador/dashboard.js'
 import { OrganizadorCrearEventoPage } from './pages/organizador/OrganizadorCrearEvento.js'
 import { createTickets } from './pages/organizador/createTickets.js'
 import { UserDashboardPage } from './pages/user/dashboard.js'
+import { UserAdminPage } from './pages/admin/userAdminPage.js'
+import { albumListPage } from './pages/user/albumList.js'
+import { songsListPage } from './pages/user/songsList.js'
+import { adminAlbumsPage } from './pages/admin/adminAlbums.js'
+import { AdminArtistsPage } from './pages/admin/adminArtists.js'
+import { AdminSongsPage } from './pages/admin/adminSongs.js'
+
+// Importar componentes globales
+import { AudioPlayer } from './components/audioPlayer.js'
 
 // Definir rutas (como en React Router)
 const routes = [
@@ -61,16 +78,16 @@ const routes = [
         component: CartPurchasePage,
         guard: () => authGuard({ allowedRoles: [ROLES.USER, ROLES.ORGANIZADOR, ROLES.ADMIN] })
     },
+    {
+        path: '/configuracion',
+        component: ConfigurationPage,
+        guard: () => authGuard({ allowedRoles: [ROLES.USER, ROLES.ORGANIZADOR, ROLES.ADMIN] })
+    },
 
     // ===== RUTAS PROTEGIDAS - ADMIN =====
     {
         path: '/admin',
         component: AdminDashboardPage,
-        guard: () => authGuard({ allowedRoles: [ROLES.ADMIN] })
-    },
-    {
-        path: '/admin/usuarios',
-        component: AdminDashboardPage, // Puedes crear páginas específicas después
         guard: () => authGuard({ allowedRoles: [ROLES.ADMIN] })
     },
     {
@@ -81,6 +98,26 @@ const routes = [
     {
         path: '/reportes',
         component: AdminDashboardPage,
+        guard: () => authGuard({ allowedRoles: [ROLES.ADMIN] })
+    },
+    {
+        path: '/admin/usuarios',
+        component: UserAdminPage,
+        guard: () => authGuard({ allowedRoles: [ROLES.ADMIN] })
+    },
+    {
+        path: '/admin/albums',
+        component: adminAlbumsPage,
+        guard: () => authGuard({ allowedRoles: [ROLES.ADMIN] })
+    },
+    {
+        path: '/admin/songs',
+        component: AdminSongsPage,
+        guard: () => authGuard({ allowedRoles: [ROLES.ADMIN] })
+    },
+    {
+        path: '/admin/artists',
+        component: AdminArtistsPage,
         guard: () => authGuard({ allowedRoles: [ROLES.ADMIN] })
     },
 
@@ -113,6 +150,16 @@ const routes = [
         guard: () => authGuard({ allowedRoles: [ROLES.USER, ROLES.ORGANIZADOR, ROLES.ADMIN] })
     },
     {
+        path: '/Musica',
+        component: albumListPage,
+        guard: () => authGuard({ allowedRoles: [ROLES.USER, ROLES.ORGANIZADOR, ROLES.ADMIN] })
+    },
+    {
+        path: '/album/:id',
+        component: songsListPage,
+        guard: () => authGuard({ allowedRoles: [ROLES.USER, ROLES.ORGANIZADOR, ROLES.ADMIN] })
+    },
+    {
         path: '/mis-reservas',
         component: UserDashboardPage,
         guard: () => authGuard({ allowedRoles: [ROLES.USER, ROLES.ORGANIZADOR, ROLES.ADMIN] })
@@ -121,6 +168,11 @@ const routes = [
         path: '/perfil',
         component: UserDashboardPage,
         guard: () => authGuard({ allowedRoles: [ROLES.USER, ROLES.ORGANIZADOR, ROLES.ADMIN] })
+    },
+    {
+        path: '/admin/artistas',
+        component: AdminArtistsPage,
+        guard: () => authGuard({ allowedRoles: [ROLES.ADMIN] })
     },
 
     // ===== RUTAS DE ERROR =====
@@ -136,6 +188,12 @@ const routes = [
 ]
 
 function init() {
+    // Inicializar sistema de temas (dark mode)
+    initTheme()
+
+    // Hacer toggleTheme accesible globalmente para botones de tema
+    window.toggleTheme = toggleTheme
+
     // Inicializar smooth scroll (Lenis)
     const lenis = initSmoothScroll()
 
@@ -145,9 +203,18 @@ function init() {
     // Crear instancia del router
     const router = new Router(routes)
 
+    // Inicializar Audio Player Global
+    const audioPlayerContainer = document.createElement('div')
+    audioPlayerContainer.id = 'global-audio-player'
+    document.body.appendChild(audioPlayerContainer)
+
+    const audioPlayer = new AudioPlayer()
+    audioPlayer.mount(audioPlayerContainer)
+
     // Iniciar el router
     router.init()
 }
 
 // Iniciar la aplicación cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', init)
+
