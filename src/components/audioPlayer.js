@@ -8,6 +8,8 @@ export class AudioPlayer {
         this.audio = new Audio();
         this.unsubscribe = null;
         this.isDragging = false;
+        this.syncVideoTime = true; // Opción para sincronizar tiempo del video con el audio
+        this.videoSyncInterval = null; // Intervalo para mantener sincronizado el video
 
         // Bind methods
         this.handleStateChange = this.handleStateChange.bind(this);
@@ -21,6 +23,7 @@ export class AudioPlayer {
         this.toggleVideo = this.toggleVideo.bind(this);
         this.closeVideo = this.closeVideo.bind(this);
         this.toggleExpanded = this.toggleExpanded.bind(this);
+        this.toggleSyncMode = this.toggleSyncMode.bind(this);
         this.isExpanded = false;
 
         // Setup audio events
@@ -209,7 +212,11 @@ export class AudioPlayer {
         const state = audioStore.getState();
         const videoUrl = state.currentSong?.videoUrl;
 
-        if (!videoUrl) return;
+        // Si no hay video, no hacer nada
+        if (!videoUrl) {
+            console.log('No hay video disponible para esta canción');
+            return;
+        }
 
         this.isExpanded = !this.isExpanded;
         const player = this.container.querySelector('.audio-player');
@@ -219,34 +226,94 @@ export class AudioPlayer {
         const videoPlayerContainer = document.querySelector('.video-player-container');
         const heroBackgroundVideo = document.querySelector('.hero-background-video');
         const videoControls = document.querySelector('[id^="video-controls-"]');
-        const heroVideo = document.querySelector('.hero-background-video video');
 
         if (this.isExpanded) {
             player.classList.add('audio-player--expanded');
 
             // Pause and hide hero video elements
-        
             if (videoPlayerContainer) videoPlayerContainer.style.display = 'none';
             if (heroBackgroundVideo) heroBackgroundVideo.style.display = 'none';
             if (videoControls) videoControls.style.display = 'none';
-
-           
 
             // Set video src and play without sound
             const fullVideoUrl = videoUrl.startsWith('http') ? videoUrl : `${getApiBaseUrl()}${videoUrl}`;
             videoPlayer.src = fullVideoUrl;
             videoPlayer.muted = true;
             videoPlayer.loop = true;
-            videoPlayer.play().catch(e => console.error("Error playing video:", e));
+
+            // Sincronizar tiempo del video con el audio si está habilitado
+            if (this.syncVideoTime) {
+                videoPlayer.addEventListener('loadedmetadata', () => {
+                    const currentAudioTime = this.audio.currentTime;
+                    videoPlayer.currentTime = currentAudioTime;
+                    videoPlayer.play().catch(e => console.error("Error playing video:", e));
+                }, { once: true });
+
+                // Iniciar sincronización continua
+                this._startVideoSync();
+            } else {
+                videoPlayer.play().catch(e => console.error("Error playing video:", e));
+            }
         } else {
             player.classList.remove('audio-player--expanded');
             videoPlayer.pause();
             videoPlayer.src = '';
 
+            // Detener sincronización
+            this._stopVideoSync();
+
             // Show hero video elements again
             if (videoPlayerContainer) videoPlayerContainer.style.display = '';
             if (heroBackgroundVideo) heroBackgroundVideo.style.display = '';
             if (videoControls) videoControls.style.display = '';
+        }
+    }
+
+    toggleSyncMode() {
+        this.syncVideoTime = !this.syncVideoTime;
+        console.log(`Sincronización de video: ${this.syncVideoTime ? 'Activada' : 'Desactivada'}`);
+
+        // Actualizar UI del botón
+        const syncBtn = this.container.querySelector('.audio-player__btn--sync');
+        if (syncBtn) {
+            syncBtn.classList.toggle('active', this.syncVideoTime);
+            syncBtn.title = this.syncVideoTime
+                ? 'Sincronización activada (click para desactivar)'
+                : 'Sincronización desactivada (click para activar)';
+        }
+
+        // Si está expandido, reiniciar sincronización
+        if (this.isExpanded) {
+            if (this.syncVideoTime) {
+                this._startVideoSync();
+            } else {
+                this._stopVideoSync();
+            }
+        }
+    }
+
+    _startVideoSync() {
+        // Detener sincronización previa si existe
+        this._stopVideoSync();
+
+        // Sincronizar cada 100ms
+        this.videoSyncInterval = setInterval(() => {
+            const videoPlayer = this.container.querySelector('.audio-player__expanded-video');
+            if (videoPlayer && !videoPlayer.paused) {
+                const timeDiff = Math.abs(videoPlayer.currentTime - this.audio.currentTime);
+
+                // Si la diferencia es mayor a 0.5 segundos, resincronizar
+                if (timeDiff > 0.5) {
+                    videoPlayer.currentTime = this.audio.currentTime;
+                }
+            }
+        }, 100);
+    }
+
+    _stopVideoSync() {
+        if (this.videoSyncInterval) {
+            clearInterval(this.videoSyncInterval);
+            this.videoSyncInterval = null;
         }
     }
 
@@ -274,6 +341,15 @@ export class AudioPlayer {
         if (cover) {
             const imgUrl = state.currentSong.fontImage || state.currentSong.imagenUrl || state.currentSong.fontImageUrl;
             cover.src = imgUrl ? (imgUrl.startsWith('http') ? imgUrl : `${getApiBaseUrl()}${imgUrl}`) : '/placeholder-music.png';
+
+            // Mostrar u ocultar el indicador de expansión según si hay video
+            if (state.currentSong.videoUrl) {
+                cover.classList.add('has-video');
+                cover.title = 'Click para expandir y ver video';
+            } else {
+                cover.classList.remove('has-video');
+                cover.title = 'Portada del álbum';
+            }
         }
 
         if (progressBar && !this.isDragging) {
@@ -295,6 +371,50 @@ export class AudioPlayer {
             } else {
                 videoBtn.style.display = 'none';
             }
+        }
+
+        // Sincronizar video expandido con la canción actual
+        this._syncExpandedVideo(state);
+    }
+
+    _syncExpandedVideo(state) {
+        // Solo actualizar si el reproductor está expandido
+        if (!this.isExpanded) return;
+
+        const videoPlayer = this.container.querySelector('.audio-player__expanded-video');
+        const videoUrl = state.currentSong?.videoUrl;
+
+        if (!videoPlayer) return;
+
+        // Si la canción tiene video y es diferente al actual
+        if (videoUrl) {
+            const fullVideoUrl = videoUrl.startsWith('http') ? videoUrl : `${getApiBaseUrl()}${videoUrl}`;
+
+            // Solo actualizar si el video es diferente
+            if (videoPlayer.src !== fullVideoUrl) {
+                videoPlayer.src = fullVideoUrl;
+                videoPlayer.muted = true;
+                videoPlayer.loop = true;
+
+                // Sincronizar tiempo si está habilitado
+                if (this.syncVideoTime) {
+                    videoPlayer.addEventListener('loadedmetadata', () => {
+                        const currentAudioTime = this.audio.currentTime;
+                        videoPlayer.currentTime = currentAudioTime;
+                        videoPlayer.play().catch(e => console.error("Error playing video:", e));
+                    }, { once: true });
+
+                    // Reiniciar sincronización continua
+                    this._startVideoSync();
+                } else {
+                    videoPlayer.play().catch(e => console.error("Error playing video:", e));
+                }
+            }
+        } else {
+            // Si no hay video, limpiar el reproductor
+            videoPlayer.pause();
+            videoPlayer.src = '';
+            this._stopVideoSync();
         }
     }
 
@@ -336,6 +456,9 @@ export class AudioPlayer {
                     </div>
 
                     <div class="audio-player__volume-controls">
+                        <button class="audio-player__btn audio-player__btn--sync active" title="Sincronización activada (click para desactivar)">
+                            🔗
+                        </button>
                         <span class="audio-player__volume-icon">${Icons.volume || '🔊'}</span>
                         <input type="range" class="audio-player__volume-bar" min="0" max="1" step="0.1" value="1" aria-label="Control de volumen">
                     </div>
@@ -354,6 +477,7 @@ export class AudioPlayer {
         this.container.querySelector('.audio-player__btn--next').addEventListener('click', this.next);
         this.container.querySelector('.audio-player__btn--prev').addEventListener('click', this.prev);
         this.container.querySelector('.audio-player__song-cover').addEventListener('click', this.toggleExpanded);
+        this.container.querySelector('.audio-player__btn--sync').addEventListener('click', this.toggleSyncMode);
 
         const progressBar = this.container.querySelector('.audio-player__progress-bar');
         progressBar.addEventListener('input', (e) => {
